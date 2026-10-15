@@ -49,12 +49,22 @@ uv run pytest
 
 ## Hosting
 
-Any Cloudflare Pages project works (free plan): build with `npm run build`, output directory
-`site`, and the relay deploys from `functions/` automatically. Or from your machine:
+Live at https://open-league-dashboard.pages.dev, on Cloudflare Pages (free plan). The relay
+deploys from `functions/` along with the site.
+
+**Deploys.** Every push to `main` runs `.github/workflows/deploy.yml`: lint and tests, then it
+builds the bundle and publishes to the `open-league-dashboard` Pages project. Pull requests
+only run the tests. It needs two repository secrets (Settings → Secrets and variables →
+Actions):
+
+- `CLOUDFLARE_API_TOKEN`: a Cloudflare API token with **Account → Cloudflare Pages → Edit**
+- `CLOUDFLARE_ACCOUNT_ID`: the Cloudflare account the project lives in
+
+To deploy by hand, or to host your own copy:
 
 ```
 npx wrangler pages project create open-league-dashboard --production-branch main
-npm run build && npx wrangler pages deploy
+npm run build && npx wrangler pages deploy --branch main
 ```
 
 The free plan allows 100,000 relay requests a day, and loading a private league uses about
