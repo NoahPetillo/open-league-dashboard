@@ -141,6 +141,25 @@
     draw();
   }
 
+  // ── R-rated mode (Settings tab): crude names for a few things, only for people who opt in.
+  // Saved on this device. A section with R-rated wording reads A.rRated() when it draws and
+  // redraws on the "open:rated" event.
+  const R_KEY = "open:rRated";
+  const rRated = () => { try { return localStorage.getItem(R_KEY) === "1"; } catch { return false; } };
+  function setRRated(on) {
+    try { on ? localStorage.setItem(R_KEY, "1") : localStorage.removeItem(R_KEY); } catch { /* private mode */ }
+    document.dispatchEvent(new CustomEvent("open:rated", { detail: on }));
+  }
+
+  // ── the league's playoff tiebreakers, in words (D.punishment.tiebreak, league/punishment.py) ──
+  const TIEBREAK_WORDS = { h2h: "head-to-head record", pf: "points for", div: "division record", pa: "points against" };
+  function tiebreakText(P) {
+    const keys = (P && P.tiebreak) || ["div", "pf"];
+    const espn = !!(P && P.tiebreak);  // older data has no tiebreak list: the fixed default
+    const words = [...keys.map((k) => TIEBREAK_WORDS[k] || k), ...(espn ? ["a coin flip"] : [])];
+    return `Ties go to ${words.join(", then ")}${espn ? " (this league's ESPN tiebreakers)" : ""}.`;
+  }
+
   // ── manager page extension points (managers.js renders these) ──
   // Any tab can add a block to every manager's page:
   //   A.managerBlocks.push({ order, place: "top" | "bottom", render(t) → html, after(t, root) })
@@ -194,7 +213,8 @@
 
   window.App = {
     D, L, MY_TEAM, teams, T, ranked, $, $$, esc, f1, sgn, cls, pct, fmtDate, initials,
-    logo, chip, tipHtml, divergingBars, leaders, laughs, headshot, lineChart, onRoute, start,
+    logo, chip, tipHtml, divergingBars, leaders, laughs, headshot, lineChart, onRoute, start, tiebreakText,
+    rRated, setRRated,
     managerBlocks, managerTags,
     isShown: (view) => !document.querySelector(`.view[data-view="${view}"]`)?.hidden,
   };

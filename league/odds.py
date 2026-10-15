@@ -23,19 +23,23 @@ HISTORY_SIMS = 5000  # past weeks only need to be smooth enough for a line chart
 def _standings(team_ids: list[int], matchups: dict[int, list[dict]],
                divisions: dict[int, int], through: int) -> list[dict]:
     """Every team's state after week ``through``, from the box-score matchups:
-    record (equal scores = a tie), points for, division wins and weekly scores."""
-    st = {t: {"id": t, "wins": 0, "losses": 0, "ties": 0, "points_for": 0.0,
-              "div_wins": 0.0, "scores": []} for t in team_ids}
+    record (equal scores = a tie), points for and against, division wins, weekly scores,
+    and head-to-head (``beat``/``met``: opponent → wins over / games against, ties half)."""
+    st = {t: {"id": t, "wins": 0, "losses": 0, "ties": 0, "points_for": 0.0, "points_against": 0.0,
+              "div_wins": 0.0, "scores": [], "beat": {}, "met": {}} for t in team_ids}
     for week in sorted(w for w in matchups if w <= through):
         for g in matchups[week]:
             a, b, sa, sb = g["home"], g["away"], g["home_score"], g["away_score"]
             if a not in st or b not in st:
                 continue
             division_game = a in divisions and divisions.get(a) == divisions.get(b)
-            for me, mine, theirs in ((a, sa, sb), (b, sb, sa)):
+            for me, them, mine, theirs in ((a, b, sa, sb), (b, a, sb, sa)):
                 s = st[me]
                 s["points_for"] += mine
+                s["points_against"] += theirs
                 s["scores"].append(mine)
+                s["met"][them] = s["met"].get(them, 0) + 1
+                s["beat"][them] = s["beat"].get(them, 0) + (1 if mine > theirs else 0.5 if mine == theirs else 0)
                 key = "wins" if mine > theirs else "losses" if mine < theirs else "ties"
                 s[key] += 1
                 if division_game:
@@ -49,7 +53,8 @@ def _run(ctx, through: int, sims: int) -> dict:
     ids = [t["id"] for t in ctx.teams]
     schedule = {w: g for w, g in ctx.schedule.items() if w in weeks_left}
     return simulate(_standings(ids, ctx.matchups, ctx.divisions, through), schedule, weeks_left,
-                    sims=sims, playoff_teams=ctx.playoff_teams, divisions=ctx.divisions)
+                    sims=sims, playoff_teams=ctx.playoff_teams, divisions=ctx.divisions,
+                    tiebreak=getattr(ctx, "tiebreak", None))
 
 
 def _history(ctx, through: int, live: dict | None) -> dict:

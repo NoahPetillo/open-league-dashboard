@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from league.punishment import byes_for, playoff_field, simulate
+import random
+
+from league.punishment import Standings, byes_for, playoff_field, simulate, tiebreak_order
 
 
 def _league():
@@ -213,3 +215,64 @@ def test_no_bye_race_when_the_bracket_is_a_power_of_two():
     teams, schedule = _league()
     assert set(simulate(teams, schedule, [3, 4], sims=200, playoff_teams=2)["races"]) == {"last", "playoffs"}
     assert set(simulate(teams, schedule, [3, 4], sims=200)["races"]) == {"last"}
+
+
+# ── the league's own tiebreakers ──────────────────────────────────────────────
+def test_tiebreak_order_puts_the_leagues_rule_first_then_espns_order():
+    assert tiebreak_order("TOTAL_POINTS_SCORED") == ("pf", "h2h", "div", "pa")
+    assert tiebreak_order("INTRA_DIVISION_RECORD") == ("div", "h2h", "pf", "pa")
+    assert tiebreak_order("H2H_RECORD") == ("h2h", "pf", "div", "pa")
+    assert tiebreak_order("TOTAL_POINTS_AGAINST") == ("pa", "h2h", "pf", "div")
+    assert tiebreak_order("SOMETHING_NEW") is None and tiebreak_order(None) is None
+
+
+def _book(**kw):
+    ids = [1, 2, 3]
+    base = {"wins": dict.fromkeys(ids, 5), "pf": {1: 900, 2: 950, 3: 800}, "pa": {1: 850, 2: 800, 3: 900},
+            "div_wins": {1: 3, 2: 1, 3: 2}, "beat": {}, "met": {}}
+    base.update(kw)
+    return Standings(**base)
+
+
+def test_rank_follows_the_first_tiebreaker_that_separates():
+    rng = random.Random(1)
+    assert _book().rank([1, 2, 3], ("pf", "div"), rng) == [2, 1, 3]
+    assert _book().rank([1, 2, 3], ("div", "pf"), rng) == [1, 3, 2]
+    assert _book().rank([1, 2, 3], ("pa",), rng) == [3, 1, 2]  # more points against wins it
+
+
+def test_wins_come_before_any_tiebreaker():
+    book = _book(wins={1: 4, 2: 5, 3: 6})
+    assert book.rank([1, 2, 3], ("pf",), random.Random(1)) == [3, 2, 1]
+
+
+def test_head_to_head_needs_every_tied_team_to_have_met_equally():
+    met = {(a, b): 1 for a in (1, 2, 3) for b in (1, 2, 3) if a != b}
+    beat = {(3, 1): 1, (3, 2): 1, (1, 2): 1}
+    book = _book(beat=beat, met=met)
+    assert book.rank([1, 2, 3], ("h2h", "pf"), random.Random(1)) == [3, 1, 2]
+    uneven = dict(met)
+    uneven[(1, 2)] = uneven[(2, 1)] = 2
+    book = _book(beat=beat, met=uneven)
+    assert book.rank([1, 2, 3], ("h2h", "pf"), random.Random(1)) == [2, 1, 3]  # skipped → points for
+
+
+def test_a_dead_heat_is_a_coin_flip():
+    book = _book(pf=dict.fromkeys([1, 2, 3], 900))
+    seen = {tuple(book.rank([1, 2], ("pf",), random.Random(s))) for s in range(20)}
+    assert seen == {(1, 2), (2, 1)}
+
+
+def test_simulate_reports_the_rules_it_used():
+    teams, schedule = _league()
+    out = simulate(teams, schedule, [3, 4], sims=200, playoff_teams=2, tiebreak=tiebreak_order("H2H_RECORD"))
+    assert out["tiebreak"] == ["h2h", "pf", "div", "pa"]
+    assert out["division_winners"] is False
+    assert simulate(teams, schedule, [3, 4], sims=200)["tiebreak"] == ["div", "pf"]
+
+
+def test_head_to_head_counts_games_played_in_the_simulation_too():
+    met = {(1, 2): 1, (2, 1): 1}
+    book = _book(beat={(2, 1): 1}, met=met, played=[(1, 2), (1, 2)])  # 2 won the real game, 1 the next two
+    assert book.rank([1, 2], ("h2h", "pf"), random.Random(1)) == [1, 2]
+    assert _book(beat={(2, 1): 1}, met=met).rank([1, 2], ("h2h", "pf"), random.Random(1)) == [2, 1]

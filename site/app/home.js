@@ -27,10 +27,12 @@
   ].filter(Boolean);
   $("#tiles").innerHTML = tiles.map((t) => `<div class="card tile"><div class="label">${t.label}</div><div class="value num">${t.value}</div><div class="who">${t.who}</div></div>`).join("");
 
-  // ── most-traded players ─────────────────────────────────
-  (function drawTraded() {
+  // ── most-traded players (R-rated mode, Settings tab, gives it its old name) ──
+  function drawTraded() {
     const M = D.most_traded || [];
     if (M.length < 1) return;
+    const R = A.rRated();
+    $("#traded h2").textContent = R ? "Biggest league slut" : "Most traded players";
     $("#traded").hidden = false;
     const top = M.slice(0, 3);
     const headshot = A.headshot;
@@ -48,7 +50,7 @@
         <div class="head">${img}</div>
         <div class="pname">${esc(p.name)}</div>
         <div class="pmeta">${esc(meta(p))}</div>
-        ${i === 0 ? `<span class="tag">Most traded</span>` : ""}
+        ${i === 0 ? `<span class="tag">${R ? "League Slutt" : "Most traded"}</span>` : ""}
         <div class="plinth"><div class="rk">${i + 1}</div><div class="ct">${trades(p.trades)}</div></div>
       </div>`;
     }).join("");
@@ -73,6 +75,8 @@
     const rest = M.slice(3, 8);
     $("#tradedSub").textContent = `The players who've been passed around the most this season. Ranked by trades, then by how many fantasy teams have had them, then season points.` +
       (tied > 1 ? ` ${tied} players are tied at ${trades(n)}${tied > 3 ? ", so the tiebreakers decide the podium" : ""}.` : "");
-    $("#tradedAlso").innerHTML = rest.length ? `Also on the move: ${rest.map((p) => `<b>${esc(p.name)}</b> (${p.trades})`).join(", ")}` : "";
-  })();
+    $("#tradedAlso").innerHTML = rest.length ? `${R ? "Also getting around" : "Also on the move"}: ${rest.map((p) => `<b>${esc(p.name)}</b> (${p.trades})`).join(", ")}` : "";
+  }
+  drawTraded();
+  document.addEventListener("open:rated", drawTraded);
 })();

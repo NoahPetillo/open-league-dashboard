@@ -24,6 +24,7 @@ from typing import Any
 
 from league.espn import EspnClient
 from league.lineup import best_lineup
+from league.punishment import tiebreak_order
 
 log = logging.getLogger(__name__)
 
@@ -361,6 +362,7 @@ class ReportContext:
     kickoff: dict[int, dict[str, int]] = field(default_factory=dict)   # week → player → kickoff, epoch ms
     late: dict[int, dict[int, set[str]]] = field(default_factory=dict)  # week → team → added after kickoff
     draft: list[dict] = field(default_factory=list)  # [{pick, round, round_pick, team, id, name}]
+    tiebreak: tuple[str, ...] | None = None   # the league's seeding tiebreakers (punishment.tiebreak_order)
     outputs: dict[str, Any] = field(default_factory=dict)  # finished features' output, by report key
 
     def startable(self, week: int, team: int) -> set[str]:
@@ -517,7 +519,8 @@ def build_context(client: EspnClient, through: int | None = None) -> ReportConte
         division_names=dict(getattr(settings, "division_map", {}) or {}),
         kicks=kicks, activity=activity, trades=graded, teams=teams,
         faab_budget=int(getattr(settings, "acquisition_budget", 0) or 0), counters=counters,
-        proj=reads.proj, kickoff=reads.kickoff, late=late, draft=draft)
+        proj=reads.proj, kickoff=reads.kickoff, late=late, draft=draft,
+        tiebreak=tiebreak_order(getattr(settings, "playoff_seed_tie_rule", None)))
     ctx.outputs["most_traded"] = _most_traded(trades, pts, pos, pro, weeks)
     return ctx
 

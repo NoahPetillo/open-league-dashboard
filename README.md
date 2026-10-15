@@ -21,6 +21,8 @@ server.
 - **Lineups:** lineup efficiency, points left on the bench, records with perfect lineups,
   weekly score heatmap
 - **Awards:** weekly awards and streaks
+- **Settings:** R-rated mode (off by default; turns on cruder names for a couple of things)
+  and whether this device remembers the league
 
 Some public leagues keep their adds, drops and trades to members. For those, everything
 except trades and waivers works without cookies, and the page says so.
@@ -50,8 +52,11 @@ Each feature is one module in `league/`, built from the context `league/report.p
 from ESPN, with its method in the module's docstring. For example, power rankings
 (`league/power.py`) are 50% all-play record, 30% the last three weeks of scoring and 20%
 actual record, and the odds (`league/punishment.py`) simulate the rest of the regular season
-10,000 times on ESPN's real schedule. Playoff seeding follows one common rule set: division
-winners first, then the best records, with ties going to division record and then points for.
+10,000 times on ESPN's real schedule. Playoff seeding follows ESPN's rules and the league's
+own settings: the number of playoff teams, division winners first (in leagues with
+divisions), then the best records. Ties go to the league's chosen tiebreaker first, then
+the rest of ESPN's order (head-to-head, points for, division record, points against), then a
+coin flip.
 
 The first visit downloads about 6 MB (Python itself) from the jsDelivr CDN, and the browser
 caches it after that. Reading a league takes 30 to 100 requests to ESPN depending on how far

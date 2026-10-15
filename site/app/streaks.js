@@ -31,7 +31,12 @@
     dud:        { icon: "🧨", unit: (n) => (n === 1 ? "week starting a dud" : "weeks in a row starting a dud"),
                   best: "Most weeks in a row starting a dud" },
   };
-  const kindOf = (key) => S.kinds.find((k) => k.key === key) || { key, title: key, what: "", min: 1 };
+  // R-rated mode's names (Settings tab); the data's own titles are the clean ones.
+  const R_TITLES = { sub100: "Utter fucking disgust" };
+  const kindOf = (key) => {
+    const k = S.kinds.find((x) => x.key === key) || { key, title: key, what: "", min: 1 };
+    return A.rRated() && R_TITLES[key] ? { ...k, title: R_TITLES[key] } : k;
+  };
   const metaOf = (key) => META[key] || {
     icon: "💩", unit: (n) => `${wk(n)} in a row`, best: `Longest run: ${kindOf(key).title}`,
   };
@@ -102,32 +107,33 @@
       } else if (k.key === "sub100") {
         const low = S.lowest_score;
         const lowText = low && T[low.team] ? ` Low score so far: ${link(low.team)}, ${f1(low.score)} in week ${esc(low.week)}.` : "";
-        rows.push(`<li class="sh-none"><b>${esc(k.title)}</b> (under 100): nobody yet.${lowText}</li>`);
+        rows.push(`<li class="sh-none"><b>${esc(kindOf(k.key).title)}</b> (under 100): nobody yet.${lowText}</li>`);
       }
     }
     return rows;
   }
 
-  const rules = `<details class="sh-rules"><summary>How streaks are counted</summary>
-    <ul>${S.kinds.map((k) => `<li><b>${esc(k.title)}</b> <span class="dim">(counts from ${esc(k.min)})</span>: ${esc(k.what)}</li>`).join("")}</ul>
+  const rules = () => `<details class="sh-rules"><summary>How streaks are counted</summary>
+    <ul>${S.kinds.map((k) => `<li><b>${esc(kindOf(k.key).title)}</b> <span class="dim">(counts from ${esc(k.min)})</span>: ${esc(k.what)}</li>`).join("")}</ul>
     <p>Regular season only. Blunders and duds are judged on final scores, so it's hindsight, and a bench player picked up after his game can't be a blunder. "Under the projection" uses ESPN's pregame projection for the starting lineup. A week without projection data doesn't count.</p>
   </details>`;
 
   // ── the section ─────────────────────────────────────────
-  const recs = recordRows();
   const LIMIT = 6; // the longest few; the rest wait behind a button so the awards aren't buried
   let showAll = false;
   function draw() {
     const shown = showAll ? active : active.slice(0, LIMIT);
+    const recs = recordRows();
     root.innerHTML = `<h2>Shame streaks</h2><p class="sub">Embarrassing runs still going after week ${esc(S.through)}.</p>
       ${active.length
         ? `<div class="sh-grid">${shown.map(card).join("")}</div>`
         : `<div class="card"><div class="empty">Nobody's on a shame streak right now. Give it a week.</div></div>`}
       ${active.length > LIMIT ? `<button type="button" class="sh-more" aria-expanded="${showAll}">${showAll ? "Show just the longest" : `Show all ${active.length} streaks`}</button>` : ""}
       ${recs.length ? `<div class="card sh-records"><h3>Season records</h3><ul class="sh-rec">${recs.join("")}</ul></div>` : ""}
-      ${rules}`;
+      ${rules()}`;
   }
   draw();
+  document.addEventListener("open:rated", draw);
   root.addEventListener("click", (e) => { if (e.target.closest(".sh-more")) { showAll = !showAll; draw(); } });
   root.hidden = false;
 

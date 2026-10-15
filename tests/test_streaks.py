@@ -114,7 +114,7 @@ def test_under_100_shows_at_one_week_and_is_also_under_120():
     assert (2, "sub100") not in active
     assert (1, "under120") not in active  # a single week is below the minimum of 2
     kinds = {k["key"]: k for k in out["kinds"]}
-    assert kinds["sub100"]["title"] == "Utter fucking disgust" and kinds["sub100"]["min"] == 1
+    assert kinds["sub100"]["title"] == "Utter disgust" and kinds["sub100"]["min"] == 1
     assert kinds["under120"]["title"] == "Shameful" and kinds["under120"]["min"] == 2
     assert out["lowest_score"] == {"team": 1, "week": 1, "score": 99.99}
     # Next week it happens again, so the counter reads 2.

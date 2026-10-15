@@ -209,7 +209,7 @@
   const left = P && P.weeks_left && P.weeks_left.length ? P.weeks_left : null;
   const wild = Math.max(0, spots - divCount);
   $("#poSub", root).textContent = hasOdds
-    ? `We simulated the rest of the regular season (weeks ${left[0]}–${last(left)}) ${P.sims.toLocaleString()} times, using each team's scoring so far and the real schedule. ${divCount > 1 ? `The ${divCount} division winners get in, then the best records fill the other ${wild} spots` : `The ${spots} best records get in`}. Ties go to division record, then points for.`
+    ? `We simulated the rest of the regular season (weeks ${left[0]}–${last(left)}) ${P.sims.toLocaleString()} times, using each team's scoring so far and the real schedule. ${divCount > 1 ? `The ${divCount} division winners get in, then the best records fill the other ${wild} spots` : `The ${spots} best records get in`}. ${A.tiebreakText(P)}`
     : P ? "How each team's odds have moved after every week."
     : "The regular season is over. Here is how each team's odds moved on the way to the final bracket.";
 

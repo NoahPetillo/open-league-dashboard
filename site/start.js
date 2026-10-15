@@ -8,7 +8,7 @@
   // The dashboard's scripts, in load order: core first, main last (it starts the router).
   const APP = ["core", "home", "livescores", "standings", "odds", "trades", "waivers", "lineups", "power",
     "swap", "playoffs", "managers", "rivalries", "offers", "tree", "faab", "awards", "whatif", "regret",
-    "streaks", "sos", "draft", "drops", "loyalty", "upsets", "sunday", "clinch", "style", "main"];
+    "streaks", "sos", "draft", "drops", "loyalty", "upsets", "sunday", "clinch", "style", "settings", "main"];
 
   // ── saved league (this browser only) ──
   const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
@@ -51,7 +51,14 @@
       worker.postMessage({ id, ...msg });
     });
   }
-  window.OpenLeague = { refreshLive: () => ask({ type: "live" }) };
+  // For the dashboard: the Live tab's refresh, and the Settings tab's "remember this league".
+  window.OpenLeague = {
+    refreshLive: () => ask({ type: "live" }),
+    isSaved: () => !!load().leagueId,
+    remember: () => current.leagueId && save({ leagueId: current.leagueId, season: current.season, s2: current.s2, swid: current.swid }),
+    forget: () => save(null),
+    isPrivate: () => !!current.s2,
+  };
 
   function loadScripts(names) {
     return names.reduce((p, name) => p.then(() => new Promise((resolve, reject) => {

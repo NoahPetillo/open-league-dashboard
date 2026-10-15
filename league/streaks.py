@@ -8,7 +8,7 @@ What counts
 
     loss        Lost its game: score below the opponent's. A tie is not a loss and ends a run.
     under120    Scored under 120 ("Shameful").
-    sub100      Scored under 100 ("Utter fucking disgust", the commissioner's own words).
+    sub100      Scored under 100 ("Utter disgust"; the page has a cruder name in R-rated mode).
                 Every sub100 week is also an under120 week.
     blunder     The team's biggest start/sit miss that week is 15+ points: a benched player
                 outscored a starter he could legally have replaced (``awards._best_swap``).
@@ -58,7 +58,7 @@ DUD_POSITIONS = frozenset({"QB", "RB", "WR", "TE"})
 KINDS: tuple[tuple[str, str, str, int], ...] = (
     ("loss", "Losing streak", "Losses in a row.", 2),
     ("under120", "Shameful", "Weeks in a row scoring under 120.", 2),
-    ("sub100", "Utter fucking disgust", "Weeks in a row scoring under 100.", 1),
+    ("sub100", "Utter disgust", "Weeks in a row scoring under 100.", 1),
     ("blunder", "Bench blunders",
      "Weeks in a row a benched player outscored the starter he could have replaced by 15 or more points.", 2),
     ("under_proj", "Under the projection", "Weeks in a row scoring less than ESPN projected.", 3),

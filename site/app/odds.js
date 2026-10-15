@@ -22,7 +22,7 @@
   const spots = P.playoff_spots, byes = P.byes;
   const weeksText = () => {
     const wl = P.weeks_left;
-    return `We simulated the rest of the regular season (week${wl.length === 1 ? ` ${wl[0]}` : `s ${wl[0]}–${wl[wl.length - 1]}`}) ${P.sims.toLocaleString()} times, using each team's scoring so far and the real schedule. Ties go to division record, then points for.`;
+    return `We simulated the rest of the regular season (week${wl.length === 1 ? ` ${wl[0]}` : `s ${wl[0]}–${wl[wl.length - 1]}`}) ${P.sims.toLocaleString()} times, using each team's scoring so far and the real schedule. ${A.tiebreakText(P)}`;
   };
   const safe = (r) => Math.round(r.safe_odds * 100);
 
@@ -59,7 +59,7 @@
     },
     bye: {
       title: "The race for a first-round bye",
-      sub: () => `The top ${byes === 1 ? "seed skips" : `${byes} seeds skip`} the first round of the playoffs, and division winners get the top seeds. ${weeksText()}`,
+      sub: () => `The top ${byes === 1 ? "seed skips" : `${byes} seeds skip`} the first round of the playoffs${P.division_winners === false ? "" : ", and division winners get the top seeds"}. ${weeksText()}`,
       lead: "On the bubble",
       magic: (r) => `Get there and you get a bye at least ${100 - safe(r)}% of the time`,
       typical: "The last bye usually goes to a team with",
