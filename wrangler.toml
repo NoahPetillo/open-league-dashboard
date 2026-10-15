@@ -1,0 +1,5 @@
+# Cloudflare Pages: the static site (site/) plus the stateless ESPN cookie relay (functions/).
+# No login, no database. Build the Python bundle first (npm run build); npm run dev does both.
+name = "open-league-dashboard"
+pages_build_output_dir = "site"
+compatibility_date = "2026-09-01"

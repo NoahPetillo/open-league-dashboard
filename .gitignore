@@ -1,0 +1,15 @@
+# generated: the Python bundle the page loads (npm run build)
+site/py/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+
+# cloudflare
+node_modules/
+.wrangler/
+.dev.vars

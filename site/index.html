@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>League Dashboard</title>
+<meta name="description" content="Standings and power rankings for any ESPN fantasy football league, computed in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><span class="mark">League Dashboard</span></div></header>
+
+<main class="wrap">
+  <section id="start" class="start">
+    <h1>Your ESPN league, ranked.</h1>
+    <p class="lede">Standings and power rankings for any ESPN fantasy football league. Everything is worked out right here in your browser.</p>
+
+    <form id="form" class="card form" novalidate>
+      <div class="row">
+        <label class="field grow">
+          <span>League ID or league URL</span>
+          <input id="league" name="league" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="e.g. 12345678" required>
+        </label>
+        <label class="field">
+          <span>Season</span>
+          <select id="season" name="season"></select>
+        </label>
+      </div>
+
+      <details id="private" class="private">
+        <summary>Private league? Add your ESPN cookies</summary>
+        <div class="private-body">
+          <label class="field">
+            <span>espn_s2</span>
+            <input id="s2" name="s2" autocomplete="off" spellcheck="false" placeholder="AEB…">
+          </label>
+          <label class="field">
+            <span>SWID</span>
+            <input id="swid" name="swid" autocomplete="off" spellcheck="false" placeholder="{XXXXXXXX-XXXX-…}">
+          </label>
+          <ol class="how">
+            <li>Log in at <b>fantasy.espn.com</b> on a computer.</li>
+            <li>Open developer tools (<kbd>F12</kbd>, or <kbd>⌥⌘I</kbd> on a Mac) → <b>Application</b> → <b>Cookies</b> → <b>espn.com</b>.</li>
+            <li>Copy the values of <b>espn_s2</b> and <b>SWID</b>.</li>
+          </ol>
+        </div>
+      </details>
+
+      <label class="check"><input id="remember" type="checkbox"> Remember on this device</label>
+
+      <p id="formError" class="error" role="alert" hidden></p>
+      <button id="go" class="btn" type="submit">Show my league</button>
+
+      <p class="fine">Nothing is saved on a server. Public leagues load straight from ESPN. For a private league, your cookies pass through our relay to ESPN and are never stored or logged. They give access to your ESPN account, so only paste them on sites you trust.</p>
+    </form>
+  </section>
+
+  <section id="working" class="working" hidden aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p id="status">Starting…</p>
+  </section>
+
+  <section id="result" hidden>
+    <div class="result-head">
+      <div>
+        <h1 id="leagueName"></h1>
+        <p id="leagueMeta" class="meta"></p>
+      </div>
+      <button id="again" class="btn ghost" type="button">Another league</button>
+    </div>
+
+    <section id="powerSec" class="card">
+      <div class="card-head">
+        <h2>Power rankings</h2>
+        <p id="powerMethod" class="meta"></p>
+      </div>
+      <ol id="powerList" class="power-list"></ol>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Standings</h2></div>
+      <div class="tbl-scroll"><table id="standTbl" class="tbl"></table></div>
+    </section>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

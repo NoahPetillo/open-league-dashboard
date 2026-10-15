@@ -1,0 +1,28 @@
+[project]
+name = "open-league-dashboard"
+version = "0.1.0"
+description = "Standings and power rankings for any ESPN fantasy football league, computed in the browser."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "espn-api>=1.0.0",
+    "requests>=2.32.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3.0", "ruff>=0.7.0"]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "py"]

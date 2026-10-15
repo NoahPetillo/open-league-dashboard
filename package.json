@@ -1,0 +1,12 @@
+{
+  "name": "open-league-dashboard",
+  "private": true,
+  "description": "Cloudflare Pages side of the open dashboard: the static site and the stateless ESPN cookie relay (functions/).",
+  "scripts": {
+    "build": "uv run python scripts/build_bundle.py",
+    "dev": "npm run build && wrangler pages dev --port 8789"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}
