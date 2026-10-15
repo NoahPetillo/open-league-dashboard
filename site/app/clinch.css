@@ -1,0 +1,56 @@
+/* Clinching scenarios (Odds tab): this week's what-ifs as sentences, then a magic-number table.
+   Colors come from the tokens in app.css only. The second declaration of a few colors is a
+   tint (color-mix); the first is the fallback for browsers without it. */
+.cl-h3 { font-size: 17px; margin: 24px 0 8px; font-weight: 700; }
+.cl-none { margin: 0; padding: 14px 18px; font-size: 14px; color: var(--ink-2); background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); max-width: 75ch; }
+
+/* scenario groups: one small label per kind, then one line per team */
+.cl-card { overflow: hidden; }
+.cl-grp + .cl-grp { border-top: 1px solid var(--border); }
+.cl-kind { display: flex; align-items: center; gap: 8px; padding: 12px 16px 4px; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.cl-kind i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.cl-kind.cl-pos i { background: var(--pos); }
+.cl-kind.cl-neg i { background: var(--neg); }
+.cl-list { margin: 0; padding: 0 0 6px; list-style: none; }
+.cl-row { display: grid; grid-template-columns: minmax(150px, 230px) minmax(0, 1fr); align-items: center; gap: 6px 16px; padding: 9px 16px; border-top: 1px solid var(--grid); }
+.cl-row:first-child { border-top: 0; }
+.cl-row a.team { min-width: 0; min-height: 40px; }
+.cl-txt { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink-2); overflow-wrap: anywhere; }
+.cl-name, .cl-verb { color: var(--ink); font-weight: 600; }
+.cl-txt .share-btn { margin-left: 8px; } /* the end of the line; hidden unless you're signed in */
+
+/* table */
+.cl-tbl th { white-space: normal; line-height: 1.25; vertical-align: bottom; }
+.cl-tbl td.cl-m { white-space: normal; }
+.cl-tbl a.team { min-height: 40px; }
+.cl-tbl th:first-child, .cl-tbl td:first-child { position: sticky; left: 0; z-index: 1; background: var(--surface); }
+.cl-tbl tbody tr:hover td:first-child { background: var(--surface-2); }
+.cl-tm { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; }
+.cl-num { display: inline-block; min-width: 24px; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; cursor: default; }
+.cl-note { margin: 10px 0 0; }
+
+/* pills: table cells and the manager page */
+.cl-pill {
+  display: inline-flex; align-items: center; min-height: 22px; padding: 0 9px;
+  font-size: 11px; font-weight: 700; line-height: 1.2; letter-spacing: .02em; white-space: nowrap;
+  color: var(--ink); cursor: default; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--border);
+}
+.cl-pill.cl-pos { background: var(--pos-soft); border-color: var(--pos); border-color: color-mix(in srgb, var(--pos) 45%, transparent); }
+.cl-pill.cl-neg { background: var(--neg-soft); border-color: var(--neg); border-color: color-mix(in srgb, var(--neg) 45%, transparent); }
+.mg-tags .cl-pill { min-height: 26px; padding: 0 11px; font-size: 12px; }
+
+@media (max-width: 760px) {
+  .cl-h3 { margin-top: 20px; }
+  .cl-kind { padding: 12px 12px 4px; }
+  .cl-row { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 10px 12px; }
+  .cl-row a.team { min-height: 36px; }
+  .cl-none { padding: 12px 14px; }
+  .cl-tbl th, .cl-tbl td { padding: 8px 8px; }
+  .cl-tbl th { font-size: 11px; }
+  .cl-tbl .team { gap: 8px; }
+  .cl-tbl .team .logo { width: 24px; height: 24px; }
+  .cl-tbl .team .mgr { display: none; }
+  .cl-tbl .team .stack { max-width: 96px; }
+  .cl-tbl .cl-pill { white-space: normal; text-align: center; }
+}

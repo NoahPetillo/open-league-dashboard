@@ -1,7 +1,8 @@
 // Runs the league's Python in a Web Worker with Pyodide, so the page stays responsive and
 // Python's network calls can use synchronous XHR (allowed in workers, not on the page).
-// Messages in: {id, leagueId, season, s2, swid}. Out: {id, status} while working,
-// then {id, result} (the JSON from py/browser.py) or {id, error}.
+// Messages in: {id, type: "build", leagueId, season, s2, swid} (read a league) or
+// {id, type: "live"} (this week's lineups again, for the league last read).
+// Out: {id, status} while working, then {id, result} (JSON from py/browser.py) or {id, error}.
 const PYODIDE = "https://cdn.jsdelivr.net/pyodide/v0.28.3/full/";
 importScripts(PYODIDE + "pyodide.js");
 
@@ -34,16 +35,21 @@ function explain(err) {
 }
 
 self.onmessage = async (e) => {
-  const { id, leagueId, season, s2, swid } = e.data;
+  const { id, type, leagueId, season, s2, swid } = e.data;
   say = (status) => self.postMessage({ id, status });
   try {
     ready = ready || boot();
     const py = await ready;
-    say("Reading your league from ESPN…");
-    const build = py.pyimport("browser").build;
-    const relay = self.location.origin + "/api/espn/";
-    const result = build(leagueId, season, s2 || null, swid || null, relay);
-    build.destroy();
+    const browser = py.pyimport("browser");
+    let result;
+    if (type === "live") {
+      result = browser.live();
+    } else {
+      say("Reading your league from ESPN…");
+      const relay = self.location.origin + "/api/espn/";
+      result = browser.build(leagueId, season, s2 || null, swid || null, relay, say);
+    }
+    browser.destroy();
     self.postMessage({ id, result });
   } catch (err) {
     if (ready && !(await ready.catch(() => null))) ready = null; // a failed boot retries next time

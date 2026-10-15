@@ -1,0 +1,53 @@
+/* Home tab: the Sunday recap. How each matchup's win chance moved as the week's games finished. Tokens only. */
+
+/* title + week picker: the picker drops under the text on a phone */
+.sun-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 0 16px; }
+.sun-head > div { flex: 1 1 320px; min-width: 0; }
+.sun-head select { flex: none; max-width: 100%; margin-bottom: 18px; }
+
+/* headline tiles: a sentence each (the tile's .label, .line and .who) */
+.sun-tiles { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.sun-tile { min-width: 0; }
+.sun-tile .line { margin: 6px 0 0; font-size: 16px; font-weight: 600; line-height: 1.35; color: var(--ink); overflow-wrap: anywhere; }
+.sun-tile .line b { font-weight: 800; }
+.sun-tiles .sun-tile .who { margin-top: 8px; font-size: 13px; line-height: 1.35; color: var(--muted); overflow-wrap: anywhere; }
+.sun-tile .share-btn { margin-top: 10px; } /* hidden (so no margin either) unless you're signed in */
+
+/* one card per matchup; 320px is the narrowest that still fits seven x labels under the chart */
+.sun-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 12px; }
+.sun-tiles + .sun-grid { margin-top: 12px; }
+.sun-card { display: flex; flex-direction: column; min-width: 0; padding: 14px 14px 12px; }
+
+/* what made the game worth a look */
+.sun-tags { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-bottom: 8px; }
+.sun-tag {
+  font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; line-height: 1.5;
+  padding: 1px 8px; border-radius: 999px; color: var(--ink); background: var(--pos-soft); white-space: nowrap;
+}
+
+/* team + score; the team ahead has the bolder score */
+.sun-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-width: 0; padding: 6px 0; }
+.sun-line + .sun-line { border-top: 1px solid var(--grid); }
+.sun-line .team { flex: 1 1 auto; min-width: 0; }
+.sun-line .team .mgr { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sun-line .sc { flex: none; font-size: 18px; font-weight: 600; line-height: 1.2; color: var(--ink-2); }
+.sun-line.lead .sc { font-weight: 800; color: var(--ink); }
+
+/* a fixed height, so the page doesn't jump when the charts fill in */
+.sun-chart { flex: none; height: 120px; min-width: 0; margin-top: 10px; overflow: hidden; }
+.sun-cap { margin: auto 0 0; padding-top: 6px; font-size: 13px; line-height: 1.4; color: var(--muted); }
+.sun-cap b { color: var(--ink-2); font-weight: 600; }
+
+/* "Show all 6 matchups" */
+.sun-more {
+  display: block; width: 100%; margin-top: 12px; min-height: 44px; padding: 10px 12px; cursor: pointer;
+  font: inherit; font-size: 14px; font-weight: 600; color: var(--ink-2);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+}
+.sun-more:hover { color: var(--ink); }
+.sun-more:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 400px) {
+  .sun-card { padding: 12px 12px 10px; }
+  .sun-tile { padding: 14px; }
+}

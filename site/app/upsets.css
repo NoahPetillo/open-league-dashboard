@@ -1,0 +1,62 @@
+/* Live tab: upset alert. One row per matchup: underdog on the left, favorite on the right. Tokens only. */
+.ua-card { overflow: hidden; }
+.ua-list { list-style: none; margin: 0; padding: 0; }
+.ua-row {
+  display: grid; align-items: center; gap: 4px 12px; padding: 12px 18px; border-bottom: 1px solid var(--grid);
+  grid-template-columns: minmax(0, 1.15fr) 62px 52px minmax(150px, 1fr) 52px 62px minmax(0, 1.15fr);
+}
+.ua-row:last-child { border-bottom: 0; }
+.ua-row.won { background: color-mix(in srgb, var(--gold-soft) 45%, var(--surface)); }
+
+.ua-team { min-width: 0; }
+.ua-team .team { max-width: 100%; }
+.ua-team.fav { justify-self: end; max-width: 100%; }
+.ua-team.fav .team { flex-direction: row-reverse; text-align: right; }
+.ua-team.fav .stack { align-items: flex-end; }
+
+.ua-sc { min-width: 0; line-height: 1.2; font-variant-numeric: tabular-nums; text-align: right; }
+.ua-sc.fav { text-align: left; }
+.ua-sc b { display: block; font-size: 15px; font-weight: 700; }
+.ua-sc small { display: block; font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+.ua-pct { font-variant-numeric: tabular-nums; text-align: right; }
+.ua-pct.fav { text-align: left; }
+.ua-pct b { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+.ua-pct.fav b { font-weight: 650; color: var(--ink-2); }
+
+.ua-mid { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.ua-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+.ua-tag {
+  font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; line-height: 1.5;
+  padding: 1px 8px; border-radius: 999px; color: var(--ink); background: var(--surface-2); border: 1px solid var(--border);
+}
+.ua-tag.coin { color: var(--ink-2); }
+.ua-tag.alert { background: var(--pos-soft); border-color: transparent; }
+.ua-tag.blow { background: var(--neg-soft); border-color: transparent; }
+.ua-tag.won { background: var(--gold-soft); border-color: transparent; }
+.ua-bar { position: relative; height: 8px; border-radius: 4px; background: var(--grid); }
+.ua-bar i { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
+.ua-bar::after { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--axis); }
+.ua-note { font-size: 12px; color: var(--muted); text-align: center; }
+.ua-mid .share-btn { align-self: center; } /* under the bar; hidden (and gap-free) unless you're signed in */
+
+/* phones and narrow windows: underdog line, favorite line, then the bar and tags */
+@media (max-width: 760px) {
+  .ua-row {
+    grid-template-columns: minmax(0, 1fr) auto 46px; gap: 6px 10px; padding: 12px 14px;
+    grid-template-areas: "dt ds dp" "ft fs fp" "mid mid mid";
+  }
+  .ua-team.dog { grid-area: dt; }
+  .ua-sc.dog { grid-area: ds; }
+  .ua-pct.dog { grid-area: dp; }
+  .ua-team.fav { grid-area: ft; justify-self: stretch; }
+  .ua-sc.fav { grid-area: fs; text-align: right; }
+  .ua-pct.fav { grid-area: fp; text-align: right; }
+  .ua-mid { grid-area: mid; margin-top: 4px; }
+  .ua-team.fav .team { flex-direction: row; text-align: left; }
+  .ua-team.fav .stack { align-items: flex-start; }
+  .ua-pct b { font-size: 20px; }
+  .ua-tags { justify-content: flex-start; }
+  .ua-note { text-align: left; }
+  .ua-mid .share-btn { align-self: flex-start; }
+}

@@ -1,0 +1,19 @@
+/* Trades tab: who says yes (offers answered, accepted, declined, trades started) */
+.of-tiles { margin-bottom: 16px; }
+.of-tbl td.n, .of-tbl th.n { width: 1%; }
+.of-rate { display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.of-meter { display: inline-block; width: 56px; height: 6px; border-radius: 3px; background: var(--grid); overflow: hidden; }
+.of-tbl th .sm { display: none; }
+.of-plus { color: var(--muted); margin-left: 1px; }
+.of-meter i { display: block; height: 100%; background: var(--pos); border-radius: 3px; }
+@media (max-width: 520px) {
+  .of-tbl .hide-xs { display: none; }
+  .of-tbl th, .of-tbl td { padding-left: 8px; padding-right: 8px; }
+  .of-meter { display: none; }
+  .of-tbl th .lg { display: none; }
+  .of-tbl th .sm { display: inline; }
+  .of-tbl .team .mgr { display: none; }
+  .of-tbl td:first-child { max-width: 112px; }
+  .of-tbl .team { max-width: 100%; gap: 6px; }
+  .of-tbl .team .logo { width: 22px; height: 22px; }
+}

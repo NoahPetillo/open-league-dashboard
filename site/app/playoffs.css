@@ -1,0 +1,77 @@
+/* Playoff odds (Odds tab) + the per-team odds chart used on the manager page */
+#playoffs { --po-gold: color-mix(in srgb, var(--gold) 60%, var(--ink)); }
+#playoffs .po-tiles { margin-bottom: 16px; }
+.po-h3 { font-size: 17px; margin: 28px 0 4px; font-weight: 700; }
+
+/* table: make-playoffs number with a small bar */
+.po-tbl a.team { min-height: 40px; }
+.po-pl { white-space: nowrap; }
+.po-num { display: inline-block; min-width: 40px; text-align: right; font-weight: 650; }
+.po-meter { display: inline-block; width: 56px; height: 6px; border-radius: 3px; background: var(--grid); vertical-align: middle; margin-left: 8px; overflow: hidden; }
+.po-meter i { display: block; height: 100%; background: var(--pos); border-radius: 3px; }
+.po-tbl th:first-child, .po-tbl td:first-child { position: sticky; left: 0; z-index: 1; background: var(--surface); }
+.po-tbl tbody tr:hover td:first-child { background: var(--surface-2); }
+
+/* chart card */
+.po-ctl { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 16px 0; }
+.po-chart-wrap { padding: 10px 12px 0; }
+.po-chart { width: 100%; min-height: 260px; }
+.po-pick { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 16px 0; }
+.po-pick-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 40px; max-width: 100%;
+  padding: 4px 12px 4px 6px; font: inherit; font-size: 13px; color: var(--ink-2);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 999px; cursor: pointer;
+  --c: var(--axis);
+}
+.po-pick-btn:hover { background: var(--surface-2); }
+.po-pick-btn .logo { width: 24px; height: 24px; }
+.po-pick-btn .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px; }
+.po-pick-btn .sw { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.po-pick-btn[aria-pressed="true"] { color: var(--ink); font-weight: 600; border-color: var(--c); box-shadow: inset 0 0 0 1px var(--c); }
+.po-hint { padding: 0 16px 14px; margin-top: 10px; max-width: 75ch; }
+
+/* manager page mini chart (App.oddsChart) */
+.po-leg { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--ink-2); margin-bottom: 6px; }
+.po-leg i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+.po-mini { width: 100%; min-height: 190px; }
+
+@media (max-width: 640px) {
+  .po-tbl .c-div, .po-tbl .c-proj { display: none; }
+  .po-tbl th, .po-tbl td { padding: 8px 8px; }
+  .po-tbl .team { gap: 8px; }
+  .po-tbl .team .logo { width: 24px; height: 24px; }
+  .po-tbl .team .mgr { display: none; }
+  .po-tbl .team .stack { max-width: 104px; }
+  .po-num { min-width: 0; display: block; }
+  .po-meter { display: block; margin: 3px 0 0 auto; width: 44px; }
+  .po-chart-wrap { padding: 10px 4px 0; }
+  .po-pick { gap: 6px; padding: 10px 12px 0; }
+  .po-pick-btn .nm { max-width: 120px; }
+  .po-ctl, .po-hint { padding-left: 12px; padding-right: 12px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .po-meter i { transition: width .3s; }
+}
+
+/* team colors for the odds chart: eight validated categorical hues (teams 9–12 reuse
+   them dashed), each stepped for its own surface in dark mode */
+#playoffs {
+  --cat-1: #2a78d6; --cat-2: #eb6834; --cat-3: #1baf7a; --cat-4: #eda100;
+  --cat-5: #e87ba4; --cat-6: #008300; --cat-7: #4a3aa7; --cat-8: #e34948;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) #playoffs {
+    --cat-1: #3987e5; --cat-2: #d95926; --cat-3: #199e70; --cat-4: #c98500;
+    --cat-5: #d55181; --cat-6: #008300; --cat-7: #9085e9; --cat-8: #e66767;
+  }
+}
+:root[data-theme="dark"] #playoffs {
+  --cat-1: #3987e5; --cat-2: #d95926; --cat-3: #199e70; --cat-4: #c98500;
+  --cat-5: #d55181; --cat-6: #008300; --cat-7: #9085e9; --cat-8: #e66767;
+}
+.po-pick-btn.dashed .sw { width: 16px; height: 0; border-radius: 0; background: none; border-top: 3px dashed var(--c); }
+.po-all { display: inline-flex; gap: 6px; margin-left: auto; }
+.po-all-btn { font: inherit; font-size: 13px; color: var(--ink-2); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0 12px; min-height: 40px; cursor: pointer; }
+.po-all-btn:hover:not(:disabled) { background: var(--surface-2); color: var(--ink); }
+.po-all-btn:disabled { opacity: .45; cursor: default; }
+@media (max-width: 760px) { .po-all { margin-left: 0; } }

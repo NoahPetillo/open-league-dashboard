@@ -1,0 +1,92 @@
+/* A little more life: the night-mode button, a deeper blue-black night palette, a soft glow at the
+   top of the page, accent marks on headings and tiles, a tab pill, hover lift on cards, and a short
+   fade when switching tabs. Loaded last; delete its <link> in index.html to go back to plain. */
+
+/* ── night palette: blue-black instead of neutral gray ── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #0a0d13; --surface: #121722; --surface-2: #19202d;
+    --grid: #222a37; --axis: #313a49; --mid: #283141; --border: rgba(160,190,255,0.10);
+    --silver-soft: #2a313d;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #0a0d13; --surface: #121722; --surface-2: #19202d;
+  --grid: #222a37; --axis: #313a49; --mid: #283141; --border: rgba(160,190,255,0.10);
+  --silver-soft: #2a313d;
+}
+:root { --accent-2: #7c5cff; --glow: color-mix(in srgb, var(--accent) 18%, transparent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --glow: color-mix(in srgb, var(--accent) 20%, transparent); } }
+:root[data-theme="dark"] { --glow: color-mix(in srgb, var(--accent) 20%, transparent); }
+
+/* ── page: a soft accent glow behind the header ── */
+body {
+  background:
+    radial-gradient(1000px 380px at 10% -60px, var(--glow), transparent 70%),
+    radial-gradient(700px 300px at 92% -120px, color-mix(in srgb, var(--accent-2) 9%, transparent), transparent 70%),
+    var(--page);
+  background-repeat: no-repeat;
+}
+body, .card, nav.sections { transition: background-color .25s ease, border-color .25s ease, color .25s ease; }
+
+/* ── header ── */
+header.top { position: relative; }
+header.top h1 {
+  background: linear-gradient(95deg, var(--ink) 35%, color-mix(in srgb, var(--accent) 75%, var(--ink)) 80%, color-mix(in srgb, var(--accent-2) 70%, var(--ink)));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  width: fit-content; max-width: calc(100% - 52px); /* the gradient spans the words; room for the button */
+}
+.theme-btn {
+  position: absolute; top: 32px; right: 16px;
+  display: grid; place-items: center; width: 40px; height: 40px; padding: 0; cursor: pointer;
+  color: var(--ink-2); background: var(--surface); border: 1px solid var(--border); border-radius: 50%;
+  box-shadow: var(--shadow); transition: color .15s, transform .2s ease, border-color .15s;
+}
+.theme-btn:hover { color: var(--ink); border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+.theme-btn:active { transform: rotate(-20deg) scale(.94); }
+.theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ── tabs: the open one gets a soft pill ── */
+nav.sections .wrap { gap: 2px; padding-top: 6px; padding-bottom: 6px; align-items: center; }
+nav.sections a { padding: 7px 11px; border-bottom: 0; border-radius: 999px; transition: background-color .15s, color .15s; }
+nav.sections a:hover { background: var(--surface-2); }
+nav.sections a.on {
+  color: var(--accent); font-weight: 650;
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* ── section headings: a short accent bar ── */
+main section h2::before {
+  content: ""; display: inline-block; width: 4px; height: .82em; margin-right: 10px; vertical-align: -.04em;
+  border-radius: 2px; background: linear-gradient(180deg, var(--accent), var(--accent-2));
+}
+
+/* ── cards ── */
+.card { border-radius: 14px; }
+.tile { position: relative; overflow: hidden; }
+.tile::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2) 60%, transparent);
+  opacity: .8;
+}
+@media (hover: hover) {
+  .tile, article.card { transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+  .tile:hover, article.card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+    box-shadow: 0 2px 4px rgba(11,11,11,.04), 0 10px 28px color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+}
+
+/* ── switching tabs: a quick fade up ── */
+@media (prefers-reduced-motion: no-preference) {
+  .view:not([hidden]) { animation: view-in .26s ease-out; }
+  @keyframes view-in { from { opacity: 0; transform: translateY(6px); } }
+}
+
+@media (max-width: 600px) {
+  .theme-btn { top: 24px; }
+  /* the title wraps here: blend corner to corner so no word is split down the middle */
+  header.top h1 { background-image: linear-gradient(150deg, var(--ink) 40%, color-mix(in srgb, var(--accent) 75%, var(--ink)) 75%, color-mix(in srgb, var(--accent-2) 70%, var(--ink))); }
+}

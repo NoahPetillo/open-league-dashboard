@@ -1,0 +1,77 @@
+/* Redesign trial (ui-ux-pro-max, "Sports/Fitness"): a broadcast scoreboard header, Barlow
+   Condensed for headings, numbers and tabs with Barlow for text, blue kept as the one accent
+   (the charts use blue/red for better/worse) and gold saved for winners. Loaded after
+   polish.css; delete its <link> (and the Google Fonts one) in index.html to drop it. */
+
+:root {
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --accent-2: var(--accent); /* polish.css's purple: back to plain blue */
+  --band: #0a1120;
+}
+
+body { font-family: var(--font-body); font-size: 16px; }
+
+/* ── the scoreboard header: dark in both modes, full width ── */
+header.top {
+  --page: #0a1120; --surface: #121b2e; --surface-2: #19243b;
+  --ink: #ffffff; --ink-2: #c6d0e0; --muted: #8e9bb2; --border: rgba(255,255,255,0.13);
+  --accent: #5a9cf0; --shadow: none;
+  color-scheme: dark; color: var(--ink);
+  padding-bottom: 26px;
+  /* paints the band edge to edge without making the page wider */
+  border-image: linear-gradient(180deg, #0d1628 0%, var(--band) calc(100% - 3px), var(--gold) calc(100% - 3px)) fill 0 / / 0 100vmax;
+}
+header.top::before { /* a stadium-light glow behind the title */
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  /* closest-side: the glow fades out before the box's edges, so it never ends in a hard line */
+  background: radial-gradient(closest-side at 32% 45%, rgba(90,156,240,.20), transparent);
+}
+header.top { isolation: isolate; }
+.eyebrow { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: .14em; color: var(--gold); }
+header.top h1 {
+  font-family: var(--font-display); font-weight: 800; text-transform: uppercase; letter-spacing: .005em;
+  font-size: clamp(36px, 7vw, 62px); line-height: .98;
+  background: none; color: var(--ink); -webkit-text-fill-color: currentColor;
+}
+header.top .meta, header.top .acct { color: var(--ink-2); }
+header.top .acct a { color: var(--ink); }
+.ticker { background: var(--surface); }
+.ticker .tag { font-family: var(--font-display); font-size: 14px; letter-spacing: .1em; background: var(--gold); color: #1a1405; }
+
+/* ── tabs ── */
+nav.sections { margin-top: 0; }
+nav.sections a { font-family: var(--font-display); font-size: 16px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+nav.sections a.on { font-weight: 700; }
+
+/* ── headings and numbers ── */
+h2 { font-family: var(--font-display); font-size: 30px; font-weight: 700; letter-spacing: 0; line-height: 1.1; }
+h3, .two > .card h3 { font-family: var(--font-display); font-size: 19px; font-weight: 700; letter-spacing: .01em; }
+main section h2::before { background: var(--accent); width: 5px; }
+.tile .label { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: .08em; }
+.tile .value { font-family: var(--font-display); font-size: 40px; font-weight: 700; letter-spacing: 0; }
+.tile::before { background: var(--accent); height: 3px; opacity: 1; }
+th { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: .06em; }
+.num, td.n, th.n, .pl-rn, .ct-n { font-variant-numeric: tabular-nums; }
+
+/* ── cards: feedback on hover without moving anything ── */
+@media (hover: hover) {
+  .tile:hover, article.card:hover { transform: none; }
+}
+
+/* ── polls: a winner badge instead of an emoji ── */
+.pl-rrow.win .pl-rl::after {
+  content: "Winner"; display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; vertical-align: 2px;
+  font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  background: var(--gold); color: #1a1405;
+}
+.pl-rrow.win .pl-track span { background: var(--gold); }
+
+/* ── keyboard focus everywhere ── */
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+@media (max-width: 600px) {
+  h2 { font-size: 26px; }
+  .tile .value { font-size: 34px; }
+  header.top { padding-bottom: 20px; }
+}

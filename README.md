@@ -1,14 +1,36 @@
 # Open League Dashboard
 
-Standings and power rankings for any ESPN fantasy football league. Enter a league ID and
-the stats are computed right in your browser. No account, no database, nothing saved on a
+A full stats dashboard for any ESPN fantasy football league. Enter a league ID and
+everything is computed right in your browser. No account, no database, nothing saved on a
 server.
+
+## What's in it
+
+- **Home:** power rankings with a note on each team, headline tiles, the most-traded players,
+  and a Sunday recap of how each matchup's win chances moved
+- **Live:** this week's lineups and scores (refreshed every 5 minutes) and an upset alert
+- **Standings:** all-play records and luck, a schedule swap grid, and strength of schedule ahead
+- **Odds:** playoff, bye and last-place odds from 10,000 simulated seasons, how they've moved,
+  and clinching scenarios
+- **Managers:** a page per manager, with a manager style
+- **Rivalries:** head-to-head records, including past seasons ESPN still has
+- **Draft:** every pick graded, team report cards
+- **Trades:** every trade graded for both sides, who wins the trade market, trade offers,
+  the trade tree and trade regret
+- **Waivers:** FAAB report card, drops that got away, ride-or-die players and every add/drop
+- **Lineups:** lineup efficiency, points left on the bench, records with perfect lineups,
+  weekly score heatmap
+- **Awards:** weekly awards and streaks
+
+Some public leagues keep their adds, drops and trades to members. For those, everything
+except trades and waivers works without cookies, and the page says so.
 
 ## How it works
 
-- `site/` is a static page. A Web Worker loads [Pyodide](https://pyodide.org) (Python
-  compiled to WebAssembly) and runs the Python in `league/` and `py/browser.py`, reading the
-  league through [espn-api](https://github.com/cwendt94/espn-api).
+- `site/` is a static page. A Web Worker (`site/worker.js`) loads [Pyodide](https://pyodide.org)
+  (Python compiled to WebAssembly) and runs `py/browser.py`, which reads the league through
+  [espn-api](https://github.com/cwendt94/espn-api) and builds the report with `league/`.
+  `site/start.js` then hands the result to the dashboard's tabs in `site/app/`.
 - **Public leagues** load straight from ESPN, which allows requests from any site. No server
   is involved.
 - **Private leagues** need the `espn_s2` and `SWID` cookies from a logged-in ESPN session.
@@ -22,16 +44,18 @@ server.
 Cookies and the league ID are saved in your browser only when you tick "Remember on this
 device".
 
-## Power rankings
+## How the numbers work
 
-A 0–100 score after every completed regular-season week:
+Each feature is one module in `league/`, built from the context `league/report.py` reads
+from ESPN, with its method in the module's docstring. For example, power rankings
+(`league/power.py`) are 50% all-play record, 30% the last three weeks of scoring and 20%
+actual record, and the odds (`league/punishment.py`) simulate the rest of the regular season
+10,000 times on ESPN's real schedule. Playoff seeding follows one common rule set: division
+winners first, then the best records, with ties going to division record and then points for.
 
-- 50% all-play record (your score against every other team's score that week)
-- 30% scoring over the last three weeks, scaled across the league
-- 20% actual record
-
-Each team also gets a one-line note about its most notable fact that week. The full rules
-are in `league/power.py`.
+The first visit downloads about 6 MB (Python itself) from the jsDelivr CDN, and the browser
+caches it after that. Reading a league takes 30 to 100 requests to ESPN depending on how far
+the season has gone, so a load takes roughly 10 to 30 seconds.
 
 ## Running it locally
 
@@ -69,9 +93,6 @@ npm run build && npx wrangler pages deploy --branch main
 
 The free plan allows 100,000 relay requests a day, and loading a private league uses about
 four. Public leagues don't use the relay at all.
-
-A visitor's first load downloads about 6 MB (Python itself) from the jsDelivr CDN. After
-that their browser caches it.
 
 ## License
 

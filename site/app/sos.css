@@ -1,0 +1,57 @@
+/* Schedule ahead (Standings tab). Colors come from tokens only. */
+#sos { padding-bottom: 8px; }
+.sos-card { overflow: hidden; }
+.sos-tbl { width: auto; min-width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+.sos-tbl th, .sos-tbl td { border-bottom: 0; }
+.sos-tbl thead th { padding: 10px 4px 8px; font-size: 12px; font-weight: 600; text-align: center; }
+.sos-tbl thead th.c { min-width: 62px; }
+.sos-tbl thead th.n { min-width: 74px; padding-left: 10px; padding-right: 12px; text-align: right; white-space: normal; line-height: 1.25; }
+.sos-tbl td.c { padding: 2px; }
+.sos-tbl td.n { padding: 0 12px 0 10px; font-variant-numeric: tabular-nums; }
+.sos-tbl td.n b { font-weight: 700; }
+
+/* the team column stays put while the weeks scroll */
+.sos-tbl .sos-tm {
+  position: sticky; left: 0; z-index: 2; background: var(--surface); color: var(--ink); text-align: left; padding: 4px 12px; font-size: 14px;
+  box-shadow: 1px 0 0 var(--grid); text-transform: none; letter-spacing: 0; font-weight: 400; white-space: nowrap;
+}
+.sos-tbl thead .sos-tm { padding: 10px 12px 8px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); }
+.sos-tbl tbody tr:hover .sos-tm { background: var(--surface-2); }
+.sos-tbl .team .nm { max-width: 150px; }
+
+/* one opponent: manager name over their points per game; tint = how much they score */
+.sos-cell { min-width: 58px; padding: 5px 4px 4px; border-radius: 6px; text-align: center; line-height: 1.2; background: var(--surface-2); color: var(--ink); }
+.sos-cell.none { color: var(--muted); padding-top: 12px; padding-bottom: 12px; }
+.sos-nm { display: block; max-width: 80px; margin: 0 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 650; }
+.sos-cell small { display: block; margin-top: 1px; font-size: 11px; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* Easy to tough: blue for the opponents who score least, red for the ones who score most, near-neutral
+   in between. The toughest tier is a solid deep red so the hard weeks jump out. All mixed from tokens,
+   so dark mode follows (the light text on the deepest red flips to dark there). */
+.sos-cell.t0, .sos-scale i.t0 { background: color-mix(in srgb, var(--pos) 45%, var(--surface)); color: var(--ink); }
+.sos-cell.t1, .sos-scale i.t1 { background: var(--pos-soft); color: var(--ink); }
+.sos-cell.t2, .sos-scale i.t2 { background: color-mix(in srgb, var(--pos-soft) 45%, var(--surface)); color: var(--ink); }
+.sos-cell.t3, .sos-scale i.t3 { background: color-mix(in srgb, var(--neg-soft) 70%, var(--surface)); color: var(--ink); }
+.sos-cell.t4, .sos-scale i.t4 { background: color-mix(in srgb, var(--neg) 55%, var(--surface)); color: var(--ink); }
+.sos-cell.t5, .sos-scale i.t5 { background: color-mix(in srgb, var(--neg) 82%, var(--ink)); color: var(--surface); }
+.sos-cell.t5 .sos-nm { font-weight: 800; }
+
+.sos-scale {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 12px 18px 14px;
+  border-top: 1px solid var(--grid); font-size: 12px; color: var(--muted);
+}
+.sos-scale i { display: inline-block; width: 22px; height: 10px; border-radius: 2px; }
+#sos .note { max-width: 75ch; }
+
+@media (max-width: 760px) {
+  /* the cells name managers, so the row header keeps the manager line; the logo goes to save room */
+  .sos-tbl .sos-tm { padding: 4px 8px; }
+  .sos-tbl thead .sos-tm { padding: 10px 8px 8px; }
+  .sos-tbl .team .logo { display: none; }
+  .sos-tbl .team .nm { max-width: 104px; font-size: 13px; }
+  .sos-tbl .team .mgr { font-size: 12px; }
+  .sos-cell { min-width: 54px; }
+  .sos-tbl thead th.c { min-width: 58px; }
+  .sos-tbl td.n { padding: 0 8px; }
+  .sos-scale { padding-left: 12px; padding-right: 12px; }
+}

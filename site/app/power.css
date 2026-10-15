@@ -1,0 +1,60 @@
+/* power rankings (Home tab) */
+.power-card { overflow: hidden; }
+.power-list { list-style: none; margin: 0; padding: 0; }
+.prow {
+  display: grid; align-items: center; gap: 4px 12px; padding: 10px 18px;
+  border-bottom: 1px solid var(--grid);
+  grid-template-columns: 40px 44px minmax(150px, 1fr) minmax(0, 1.4fr) 52px 120px 84px;
+  grid-template-areas: "rk mv team why rec ps tr";
+}
+.prow:last-child { border-bottom: 0; }
+.prow:hover { background: var(--surface-2); }
+
+.p-rk {
+  grid-area: rk; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px;
+  font-size: 22px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; color: var(--ink-2);
+}
+.p-rk.r1 { background: var(--gold-soft); color: var(--ink); }
+.p-rk.r2 { background: var(--silver-soft); color: var(--ink); }
+.p-rk.r3 { background: var(--bronze-soft); color: var(--ink); }
+
+.p-mv { grid-area: mv; font-size: 13px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; cursor: default; }
+.p-mv.up { color: var(--good-text); }
+.p-mv.down { color: var(--bad-text); }
+
+.p-team { grid-area: team; min-width: 0; }
+.p-team .team { display: flex; max-width: 100%; }
+
+.p-why { grid-area: why; min-width: 0; font-size: 13px; line-height: 1.4; color: var(--ink-2); }
+.p-why .share-btn { margin-left: 8px; } /* the end of the blurb; hidden unless you're signed in */
+.p-rec { grid-area: rec; font-size: 14px; font-weight: 650; text-align: right; white-space: nowrap; }
+
+.p-score { grid-area: ps; display: flex; align-items: center; gap: 8px; min-width: 0; }
+.p-score b { flex: none; min-width: 38px; text-align: right; font-size: 15px; font-weight: 750; }
+.p-bar { flex: 1; min-width: 0; height: 6px; border-radius: 3px; background: var(--grid); overflow: hidden; }
+.p-bar i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+
+.p-trend { grid-area: tr; display: flex; justify-content: flex-end; }
+.p-spark { display: block; overflow: visible; }
+
+.power-more {
+  display: none; width: 100%; font: inherit; font-size: 13px; font-weight: 600; color: var(--ink-2);
+  background: var(--surface-2); border: 0; border-top: 1px solid var(--grid); padding: 12px; min-height: 44px; cursor: pointer;
+}
+.power-more:hover { color: var(--ink); }
+
+/* phones and narrow windows: two lines per team, and only the top six until "Show all" */
+@media (max-width: 860px) {
+  .prow {
+    gap: 2px 10px; padding: 10px 12px;
+    grid-template-columns: 36px minmax(0, 1fr) auto 64px;
+    grid-template-areas: "rk team rec ps" "mv why why why";
+  }
+  .p-mv { text-align: center; font-size: 12px; }
+  .p-score { flex-direction: column; align-items: stretch; gap: 4px; }
+  .p-score b { text-align: right; min-width: 0; }
+  .p-trend { display: none; }
+  .power-more { display: block; }
+  .power-list.collapsed .prow.more { display: none; }
+  .power-list.collapsed .prow.tail { border-bottom: 0; }
+}

@@ -1,0 +1,80 @@
+/* The ones that got away (Waivers tab and manager pages). Colors come from the tokens in app.css only. */
+#dropregret .note { margin: 10px 0 0; max-width: 75ch; }
+.dr-h3 { font-size: 17px; font-weight: 700; margin: 28px 0 4px; }
+.dr-h3 + .card { margin-top: 10px; }
+
+/* the biggest regret */
+.dr-top { display: flex; align-items: center; gap: 18px; padding: 16px 18px; border-left: 4px solid var(--neg); }
+.dr-shot { flex: none; width: 132px; aspect-ratio: 350 / 254; border-radius: 10px; overflow: hidden; background: var(--surface-2); border: 1px solid var(--border); }
+.dr-shot img, .dr-shot .ph { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.dr-shot .ph { display: grid; place-items: center; font-size: 28px; font-weight: 800; color: var(--muted); }
+.dr-copy { min-width: 0; }
+.dr-top-hd { display: flex; align-items: center; justify-content: space-between; gap: 6px 12px; }
+.dr-label { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.dr-line { margin: 4px 0 0; font-size: 20px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; overflow-wrap: anywhere; text-wrap: balance; }
+.dr-line b { font-weight: 800; }
+.dr-line2 { margin-top: 2px; font-size: 17px; color: var(--ink-2); }
+.dr-facts { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+
+/* the list of drops */
+.dr-card { overflow: hidden; }
+.dr-tbl td, .dr-tbl th { padding-left: 12px; padding-right: 12px; }
+.dr-tbl .dr-pl { white-space: normal; min-width: 150px; }
+.dr-nm b { font-weight: 600; white-space: nowrap; }
+.dr-pos { display: block; margin-top: 1px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.dr-sum { display: none; margin-top: 2px; font-size: 12px; line-height: 1.4; color: var(--muted); font-variant-numeric: tabular-nums; }
+.dr-pts { font-size: 16px; font-weight: 800; }
+.dr-oth small { display: block; font-size: 11px; line-height: 1.2; color: var(--muted); }
+.dr-tbl .team { max-width: 100%; }
+.dr-tbl .team .nm { max-width: 160px; }
+.dr-tbl .dr-sh { width: 1%; text-align: right; }
+.dr-more { display: block; width: 100%; min-height: 44px; font: inherit; font-size: 13px; font-weight: 600; color: var(--ink-2); background: var(--surface-2); border: 0; border-top: 1px solid var(--grid); cursor: pointer; }
+.dr-more:hover { color: var(--ink); }
+.dr-more:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+/* a manager's three biggest regrets */
+.dr-mg { margin: 8px 0 0; padding: 0; list-style: none; }
+.dr-mg-i { padding: 12px 18px; border-top: 1px solid var(--grid); }
+.dr-mg-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.dr-mg-n { min-width: 0; font-size: 14px; overflow-wrap: anywhere; }
+.dr-mg-n b { font-weight: 600; }
+.dr-mg-n small { margin-left: 6px; font-size: 12px; color: var(--muted); }
+.dr-mg-p { flex: none; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dr-mg-p b { font-size: 17px; font-weight: 800; }
+.dr-mg-bot { display: flex; align-items: center; justify-content: space-between; gap: 6px 12px; margin-top: 2px; }
+.dr-mg-sub { flex: 1 1 auto; min-width: 0; font-size: 13px; line-height: 1.4; color: var(--ink-2); }
+
+/* narrower screens: team chips drop the manager line, then the secondary columns move under the name */
+@media (max-width: 1000px) {
+  .dr-tbl .team .mgr { display: none; }
+  .dr-tbl .team .nm { max-width: 130px; }
+}
+@media (max-width: 900px) {
+  .dr-tbl .hide-sm { display: none; }
+  .dr-sum { display: block; }
+}
+@media (min-width: 481px) {
+  .dr-sum-x { display: none; }   /* the For other teams column is still showing */
+}
+
+/* phones: the table keeps Player, Dropped by and Points since; the rest moves under the name */
+@media (max-width: 760px) {
+  .dr-top { gap: 12px; padding: 14px; }
+  .dr-shot { width: 84px; }
+  .dr-line { font-size: 17px; }
+  .dr-line2 { font-size: 15px; }
+  .dr-tbl th, .dr-tbl td { padding-left: 8px; padding-right: 8px; }
+  .dr-tbl th { white-space: normal; line-height: 1.2; vertical-align: bottom; }
+  .dr-tbl .dr-pl { min-width: 0; }
+  .dr-nm b { white-space: normal; }
+  .dr-tbl .team { gap: 8px; }
+  .dr-tbl .team .logo { width: 24px; height: 24px; }
+  .dr-tbl .team .nm { max-width: 96px; }
+  .dr-tbl .team .mgr { display: none; }
+  .dr-tbl .dr-sh .share-btn span { display: none; }  /* icon only: the Share column stays narrow */
+  .dr-tbl .dr-sh .share-btn { padding-left: 9px; padding-right: 9px; }
+}
+@media (max-width: 480px) {
+  .dr-tbl .hide-xs { display: none; }
+  .dr-shot { width: 72px; }
+}

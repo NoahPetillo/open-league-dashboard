@@ -1,0 +1,96 @@
+/* Draft report card (Draft tab + a block on each manager page). Colors come from the tokens in app.css only. */
+#draft .dft-h3 { font-size: 17px; font-weight: 700; margin: 32px 0 2px; }
+#draft .note { margin: 10px 0 0; max-width: 75ch; }
+
+/* highlight tiles */
+.dft-tiles { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.dft-tile { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.dft-tile > .share-btn { align-self: flex-end; margin-top: auto; }
+.dft-top { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.dft-shot { position: relative; flex: none; width: 64px; height: 64px; border-radius: 12px; overflow: hidden; background: var(--surface-2); border: 1px solid var(--border); }
+.dft-shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.dft-ph { position: absolute; inset: 0; display: grid; place-items: center; font-size: 20px; font-weight: 800; color: var(--ink-2); }
+.dft-id { min-width: 0; }
+.dft-name { font-size: 19px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; overflow-wrap: anywhere; }
+.dft-meta { margin-top: 2px; font-size: 12px; letter-spacing: .03em; color: var(--muted); }
+.dft-meta:empty { display: none; }
+.dft-tile .who { margin-top: 4px; font-size: 13px; }
+.dft-line { font-size: 14px; font-weight: 600; line-height: 1.35; }
+.dft-note { font-size: 13px; line-height: 1.4; color: var(--ink-2); overflow-wrap: anywhere; }
+
+/* team report cards */
+.dft-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-top: 14px; }
+.dft-card { display: grid; grid-template-columns: 68px minmax(0, 1fr); gap: 0 14px; align-items: start; min-width: 0; padding: 14px 16px; }
+.dft-gr { text-align: center; }
+.dft-grade { font-size: 40px; font-weight: 850; letter-spacing: -0.03em; line-height: 1; color: var(--ink); cursor: default; }
+.dft-grade.up { color: var(--good-text); }
+.dft-grade.down { color: var(--bad-text); }
+.dft-rk { margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.dft-bd { min-width: 0; }
+.dft-who { min-width: 0; }
+.dft-who .team { max-width: 100%; }
+.dft-bd { display: flex; flex-direction: column; }
+.dft-bd > .share-btn { align-self: flex-end; margin-top: 8px; }
+.dft-facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; margin: 10px 0 0; font-size: 13px; }
+.dft-facts > div { display: contents; }
+.dft-facts dt { padding-top: 2px; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.dft-facts dd { margin: 0; min-width: 0; line-height: 1.35; overflow-wrap: anywhere; }
+.dft-facts dd b { font-weight: 650; }
+
+/* board */
+.dft-controls { margin: 12px 0; }
+.dft-board { table-layout: fixed; min-width: 1010px; border-collapse: separate; border-spacing: 0; }
+.dft-board th { padding: 8px 2px; text-align: center; font-size: 12px; letter-spacing: 0; text-transform: none; color: var(--ink-2); border-bottom: 1px solid var(--grid); }
+.dft-board tfoot th { border-top: 1px solid var(--grid); border-bottom: 0; }
+.dft-board td { padding: 0; border-bottom: 0; white-space: normal; vertical-align: top; }
+.dft-board tbody tr:hover td { background: none; }
+.dft-board th.rd { position: sticky; left: 0; z-index: 1; width: 40px; background: var(--surface); box-shadow: 1px 0 0 var(--grid); color: var(--muted); font-variant-numeric: tabular-nums; }
+.dft-col { display: block; padding: 0 2px; overflow: hidden; text-overflow: ellipsis; font-weight: 600; color: inherit; text-decoration: none; }
+.dft-col:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+.dft-col .slot { display: block; font-size: 10px; font-weight: 700; letter-spacing: .04em; color: var(--muted); }
+
+.dft-c { display: flex; flex-direction: column; justify-content: space-between; gap: 3px; min-width: 0; min-height: 46px; margin: 2px; padding: 5px 7px 4px; border: 1px solid var(--grid); border-radius: 6px; background: var(--surface); cursor: default; }
+.dft-c:hover { box-shadow: 0 0 0 2px var(--accent); }
+.dft-c .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; font-weight: 650; line-height: 1.2; }
+.dft-c .ln { display: flex; justify-content: space-between; align-items: baseline; gap: 4px; white-space: nowrap; font-size: 11px; line-height: 1.2; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.dft-c .ln b { font-weight: 700; color: var(--ink); }
+.dft-c.s1, .dft-sw.s1 { background: color-mix(in srgb, var(--pos-soft) 55%, var(--surface)); }
+.dft-c.s2, .dft-sw.s2 { background: var(--pos-soft); }
+.dft-c.b1, .dft-sw.b1 { background: color-mix(in srgb, var(--neg-soft) 55%, var(--surface)); }
+.dft-c.b2, .dft-sw.b2 { background: var(--neg-soft); }
+.dft-c.na, .dft-sw.na { background: var(--surface-2); }
+
+.dft-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: 12px; color: var(--ink-2); }
+.dft-sw { display: inline-block; width: 14px; height: 14px; margin-right: 5px; vertical-align: -3px; border: 1px solid var(--grid); border-radius: 4px; background: var(--surface); }
+
+/* list of every pick */
+.dft-list th { padding: 4px 6px; }
+.dft-list td { padding: 8px 10px; }
+.dft-list th:first-child { padding-left: 12px; }
+.dft-list td:first-child { padding-left: 16px; }
+.dft-sort { display: inline-flex; align-items: center; gap: 3px; min-height: 40px; padding: 0 6px; font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: none; border: 0; border-radius: 8px; cursor: pointer; }
+.dft-sort:hover, .dft-sort.on { color: var(--ink); }
+.dft-sort:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.dft-sort .arr { display: inline-block; width: 9px; font-size: 9px; text-align: center; }
+.dft-list th.n .dft-sort { justify-content: flex-end; }
+.dft-tl { font-weight: 600; color: inherit; text-decoration: none; }
+.dft-tl:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+/* manager page block */
+.dft-g { font-weight: 850; }
+.dft-g.up { color: var(--good-text); }
+.dft-g.down { color: var(--bad-text); }
+.dft-of { font-size: 13px; font-weight: 600; color: var(--muted); }
+.dft-mg { margin: 10px 0 0; padding: 0 18px; list-style: none; font-size: 14px; }
+.dft-mg li { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 0 10px; padding: 8px 0; border-top: 1px solid var(--grid); }
+.dft-mg .k { padding-top: 2px; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.dft-mg .v { min-width: 0; line-height: 1.35; overflow-wrap: anywhere; }
+.dft-mg-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px 10px; }
+
+@media (max-width: 760px) {
+  .dft-cards { grid-template-columns: minmax(0, 1fr); }
+  .dft-card { grid-template-columns: 58px minmax(0, 1fr); gap: 0 12px; padding: 12px 14px; }
+  .dft-grade { font-size: 34px; }
+  .dft-list td { padding: 8px 8px; }
+  .dft-mg { padding: 0 14px; }
+}

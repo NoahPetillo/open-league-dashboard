@@ -4,19 +4,43 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>League Dashboard</title>
-<meta name="description" content="Standings and power rankings for any ESPN fantasy football league, computed in your browser.">
+<meta name="description" content="Standings, odds, trades, waivers, live scores and more for any ESPN fantasy football league, worked out in your browser.">
+<script src="app/theme.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="app/app.css">
+<link rel="stylesheet" href="app/power.css">
+<link rel="stylesheet" href="app/swap.css">
+<link rel="stylesheet" href="app/playoffs.css">
+<link rel="stylesheet" href="app/managers.css">
+<link rel="stylesheet" href="app/rivalries.css">
+<link rel="stylesheet" href="app/offers.css">
+<link rel="stylesheet" href="app/tree.css">
+<link rel="stylesheet" href="app/faab.css">
+<link rel="stylesheet" href="app/awards.css">
+<link rel="stylesheet" href="app/whatif.css">
+<link rel="stylesheet" href="app/regret.css">
+<link rel="stylesheet" href="app/streaks.css">
+<link rel="stylesheet" href="app/sos.css">
+<link rel="stylesheet" href="app/draft.css">
+<link rel="stylesheet" href="app/drops.css">
+<link rel="stylesheet" href="app/loyalty.css">
+<link rel="stylesheet" href="app/upsets.css">
+<link rel="stylesheet" href="app/sunday.css">
+<link rel="stylesheet" href="app/clinch.css">
+<link rel="stylesheet" href="app/style.css">
+<link rel="stylesheet" href="app/polish.css">
+<link rel="stylesheet" href="app/redesign.css">
+<link rel="stylesheet" href="start.css">
 </head>
 <body>
-<header class="top"><div class="wrap"><span class="mark">League Dashboard</span></div></header>
-
-<main class="wrap">
+<div id="gate">
+<header class="gate-top"><div class="wrap"><span class="mark">League Dashboard</span></div></header>
+<div class="wrap">
   <section id="start" class="start">
-    <h1>Your ESPN league, ranked.</h1>
-    <p class="lede">Standings and power rankings for any ESPN fantasy football league. Everything is worked out right here in your browser.</p>
+    <h1>Your ESPN league, broken down.</h1>
+    <p class="lede">Power rankings, playoff odds, graded trades, waiver report cards, live scores, rivalries and more for any ESPN fantasy football league. All of it is worked out right here in your browser.</p>
 
     <form id="form" class="card form" novalidate>
       <div class="row">
@@ -26,7 +50,7 @@
         </label>
         <label class="field">
           <span>Season</span>
-          <select id="season" name="season"></select>
+          <select id="seasonPick" name="season"></select>
         </label>
       </div>
 
@@ -46,6 +70,7 @@
             <li>Open developer tools (<kbd>F12</kbd>, or <kbd>⌥⌘I</kbd> on a Mac) → <b>Application</b> → <b>Cookies</b> → <b>espn.com</b>.</li>
             <li>Copy the values of <b>espn_s2</b> and <b>SWID</b>.</li>
           </ol>
+          <p class="fine">Or skip the cookies: your league manager can make the league viewable to the public in ESPN's league settings, and then anyone can open it here with just the ID.</p>
         </div>
       </details>
 
@@ -54,39 +79,223 @@
       <p id="formError" class="error" role="alert" hidden></p>
       <button id="go" class="btn" type="submit">Show my league</button>
 
-      <p class="fine">Nothing is saved on a server. Public leagues load straight from ESPN. For a private league, your cookies pass through our relay to ESPN and are never stored or logged. They give access to your ESPN account, so only paste them on sites you trust.</p>
+      <p class="fine">Nothing is saved on a server. Public leagues load straight from ESPN. For a private league, your cookies pass through our relay to ESPN and are never stored or logged. They give access to your ESPN account, so only paste them on sites you trust. <a href="https://github.com/NoahPetillo/open-league-dashboard" target="_blank" rel="noopener">Read the code</a>.</p>
     </form>
   </section>
 
   <section id="working" class="working" hidden aria-live="polite">
     <div class="spinner" aria-hidden="true"></div>
     <p id="status">Starting…</p>
+    <p class="fine">The first visit downloads Python (about 6 MB). After that it's cached.</p>
+  </section>
+</div>
+</div>
+
+<div id="dash" hidden>
+<header class="top wrap">
+  <p class="eyebrow" id="season"></p>
+  <h1 id="lname">League Dashboard</h1>
+  <p class="meta" id="meta"></p>
+</header>
+
+<nav class="sections" aria-label="Tabs">
+  <div class="wrap">
+    <a href="#home" data-view="home">Home</a>
+    <a href="#live" data-view="live">Live</a>
+    <a href="#standings" data-view="standings">Standings</a>
+    <a href="#odds" data-view="odds">Odds</a>
+    <a href="#managers" data-view="managers">Managers</a>
+    <a href="#rivalries" data-view="rivalries">Rivalries</a>
+    <a href="#draft" data-view="draft">Draft</a>
+    <a href="#trades" data-view="trades">Trades</a>
+    <a href="#waivers" data-view="waivers">Waivers</a>
+    <a href="#lineups" data-view="lineups">Lineups</a>
+    <a href="#awards" data-view="awards">Awards</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="view" data-view="home">
+  <section id="sunday" hidden></section>
+
+  <section id="traded" hidden>
+    <h2>Most traded players</h2>
+    <p class="sub" id="tradedSub">The players who've been passed around the most.</p>
+    <div class="podium" id="podium"></div>
+    <div class="podium-floor"></div>
+    <div class="traded-cards" id="tradedCards"></div>
+    <p class="also" id="tradedAlso"></p>
   </section>
 
-  <section id="result" hidden>
-    <div class="result-head">
+
+  <section id="power"></section>
+
+  <section id="overview">
+    <h2>The headlines</h2>
+    <p class="sub">Who's dealing, who's winning the deals, and who keeps leaving points on the bench.</p>
+    <div class="tiles" id="tiles"></div>
+  </section>
+  </div>
+  <div class="view" data-view="live">
+  <section id="upsets" hidden></section>
+
+  <section id="live">
+    <h2 id="liveTitle">Live lineups</h2>
+    <p class="live-meta" id="liveMeta"></p>
+    <div class="board" id="matchups" role="group" aria-label="Matchups"></div>
+    <div class="card" id="h2h"></div>
+  </section>
+  </div>
+  <div class="view" data-view="standings">
+  <section id="standings">
+    <h2>Standings</h2>
+    <p class="sub">The all-play record is how each team would do if it played every other team every week. Luck is actual wins minus the wins that record predicts. Positive means the schedule has been kind to you. Click a column to sort.</p>
+    <div class="card tbl-wrap"><table id="standTbl"></table></div>
+  </section>
+
+  <section id="swap"></section>
+
+  <section id="sos" hidden></section>
+  </div>
+  <div class="view" data-view="odds">
+  <section id="playoffs"></section>
+
+  <section id="clinch" hidden></section>
+
+  <section id="race">
+    <div class="race-head">
       <div>
-        <h1 id="leagueName"></h1>
-        <p id="leagueMeta" class="meta"></p>
+        <h2 id="raceTitle">The race to avoid last place</h2>
+        <p class="sub" id="raceSub">Nobody wants to finish last.</p>
       </div>
-      <button id="again" class="btn ghost" type="button">Another league</button>
+      <select id="raceSel" aria-label="Which race">
+        <option value="last">Avoid last place</option>
+        <option value="playoffs" hidden>Make the playoffs</option>
+        <option value="bye" hidden>Get a first-round bye</option>
+      </select>
     </div>
-
-    <section id="powerSec" class="card">
-      <div class="card-head">
-        <h2>Power rankings</h2>
-        <p id="powerMethod" class="meta"></p>
+    <div class="race-tiles" id="raceTiles"></div>
+    <div class="two">
+      <div class="card">
+        <h3 id="raceBarsTitle">Odds of finishing last</h3>
+        <p class="cap" id="raceBarsCap">Teams with at least a 0.5% chance</p>
+        <div class="bars" id="raceBars" style="padding-top:14px"></div>
       </div>
-      <ol id="powerList" class="power-list"></ol>
-    </section>
-
-    <section class="card">
-      <div class="card-head"><h2>Standings</h2></div>
-      <div class="tbl-scroll"><table id="standTbl" class="tbl"></table></div>
-    </section>
+      <div class="card">
+        <h3 id="raceHistTitle">What last place ends up with</h3>
+        <p class="cap" id="raceHistCap">Final win total of the last-place team, across all simulations</p>
+        <div class="hist" id="raceHist"></div>
+        <div class="hist-x" id="raceHistX"></div>
+      </div>
+    </div>
+    <h3 style="font-size:17px;margin:28px 0 4px" id="gamesTitle">Toilet bowl games</h3>
+    <p class="sub" id="gamesSub">The games that swing the race the most.</p>
+    <div class="games" id="raceGames"></div>
+    <h3 style="font-size:17px;margin:28px 0 12px">Every team's path</h3>
+    <div class="card tbl-wrap"><table id="raceTbl"></table></div>
   </section>
+  </div>
+  <div class="view" data-view="managers">
+  <section id="managers"></section>
+  </div>
+  <div class="view" data-view="rivalries">
+  <section id="rivalries"></section>
+  </div>
+  <div class="view" data-view="draft">
+  <section id="draft" hidden></section>
+  </div>
+  <div class="view" data-view="trades">
+  <section id="trades">
+    <h2>Who's winning the trade market</h2>
+    <p class="sub">Each team's lineup points from its trades: the best starting lineup it could field from its actual roster, minus the best lineup if it had never traded. Totaled over every week since.</p>
+    <div class="two">
+      <div class="card">
+        <h3>Net lineup points from trades</h3>
+        <p class="cap">All of a team's trades, unwound together</p>
+        <div class="legend"><span><i style="background:var(--pos)"></i>Gained</span><span><i style="background:var(--neg)"></i>Lost</span></div>
+        <div class="bars" id="netBars"></div>
+      </div>
+      <div class="card">
+        <h3>Most trades made</h3>
+        <p class="cap">Includes trades that haven't been graded yet</p>
+        <div class="bars" id="countBars" style="padding-top:14px"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="offers"></section>
+
+  <section id="tree"></section>
+
+  <section id="regret" hidden></section>
+
+  <section id="ledger">
+    <h2>Trade ledger</h2>
+    <p class="sub">Every trade, graded for both sides. Weekly bars show how many lineup points the trade added or cost that week. If a team flipped the players it got into another trade, the grade follows the chain.</p>
+    <div class="controls">
+      <select id="teamFilter" aria-label="Filter by team"><option value="">All teams</option></select>
+      <div class="seg" role="group" aria-label="Sort trades">
+        <button data-sort="swing" aria-pressed="true">Biggest swing</button>
+        <button data-sort="new" aria-pressed="false">Newest</button>
+        <button data-sort="old" aria-pressed="false">Oldest</button>
+      </div>
+      <span class="count" id="tradeCount"></span>
+    </div>
+    <div class="trades" id="tradeList"></div>
+  </section>
+
+  <p class="method"><b>How trades are graded.</b> For each week after a trade, we compare the best starting lineup a team could have set from its real roster against the best lineup from the roster it would have had without the trade: players received taken out, players sent put back. Both sides use the same rule, so the grade measures the trade, not anyone's start/sit calls. If a team later traded away what it got, the follow-up trades are unwound too. Points are this league's exact ESPN scoring.</p>
+  </div>
+  <div class="view" data-view="waivers">
+  <section id="faab"></section>
+
+  <section id="dropregret" hidden></section>
+
+  <section id="loyalty" hidden></section>
+
+  <section id="moves">
+    <h2>Waiver wire</h2>
+    <p class="sub">Every add and drop this season.</p>
+    <div class="card tbl-wrap"><table id="moveTbl"></table></div>
+  </section>
+  </div>
+  <div class="view" data-view="lineups">
+  <section id="lineups">
+    <h2>Lineup IQ</h2>
+    <p class="sub">How close each manager got to their best possible lineup each week. Efficiency is points scored ÷ points available.</p>
+    <div class="two">
+      <div class="card">
+        <h3>Lineup efficiency</h3>
+        <p class="cap">Season to date</p>
+        <div class="bars" id="effBars" style="padding-top:14px"></div>
+      </div>
+      <div class="card">
+        <h3>Points left on the bench</h3>
+        <p class="cap">Season total</p>
+        <div class="bars" id="benchBars" style="padding-top:14px"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="whatif" hidden></section>
+
+  <section id="weekly">
+    <h2>Weekly scores</h2>
+    <p class="sub">Darker means more points. ▲ marks the week's high score and ▼ the low.</p>
+    <div class="card heat"><div class="tbl-wrap"><table id="heatTbl"></table></div><div class="scale" id="heatScale"></div></div>
+  </section>
+  </div>
+  <div class="view" data-view="awards">
+  <section id="streaks" hidden></section>
+
+  <section id="awards"></section>
+  </div>
 </main>
 
-<script src="app.js"></script>
+<footer class="wrap" id="foot"></footer>
+<div id="tip" role="tooltip"></div>
+</div>
+
+<script src="start.js"></script>
 </body>
 </html>

@@ -1,0 +1,59 @@
+/* Ride or die vs. revolving door (Waivers tab). Colors come from the tokens in app.css only. */
+.ly-card { min-width: 0; overflow: hidden; padding-bottom: 4px; }
+.ly-card .tbl-wrap { margin-top: 10px; }
+.ly-card .empty { padding: 22px 18px; }
+.ly-card .bars { padding-top: 10px; }
+#lyKept .bar-row { grid-template-columns: minmax(130px, 220px) 1fr 76px; }   /* room for "13 of 19" */
+.ly-hd { display: flex; align-items: flex-end; justify-content: space-between; gap: 6px 10px; padding-right: 18px; }
+.ly-hd h3 { min-width: 0; }
+.ly-h4 { margin: 18px 0 0; padding: 14px 18px 0; border-top: 1px solid var(--grid); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.ly-card a:focus-visible, .ly-names summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+/* ride or die: the table of day-ones */
+.ly-tbl th, .ly-tbl td { padding-left: 10px; padding-right: 10px; }
+.ly-tbl .ly-rk { width: 1%; padding-left: 18px; }
+.ly-tbl th:last-child, .ly-tbl td:last-child { padding-right: 18px; }
+.ly-tbl .ly-pl { white-space: normal; }
+.ly-pl b { font-weight: 600; }
+.ly-pos { margin-left: 6px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.ly-tbl .team { max-width: 100%; }
+.ly-tbl .team .nm { max-width: 150px; }
+
+/* revolving door: one sentence per roster spot */
+.ly-doors { list-style: none; margin: 8px 0 0; padding: 0; }
+.ly-door { display: flex; align-items: flex-start; gap: 14px; padding: 12px 18px; border-top: 1px solid var(--grid); }
+.ly-count { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px; background: var(--neg-soft); color: var(--ink); font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ly-door-b { flex: 1; min-width: 0; }
+.ly-door-t { margin: 0; font-size: 15px; line-height: 1.35; overflow-wrap: anywhere; }
+.ly-door-t a { color: inherit; font-weight: 700; text-decoration: none; }
+.ly-door-t a:hover { text-decoration: underline; text-underline-offset: 2px; }
+.ly-door-r { display: flex; align-items: center; justify-content: space-between; gap: 6px 10px; }
+.ly-door-r .share-btn { margin: 4px 0 0 auto; }
+.ly-door-s { flex: 1 1 auto; min-width: 0; margin: 2px 0 0; font-size: 13px; color: var(--ink-2); }
+.ly-names { margin-top: 2px; font-size: 13px; color: var(--ink-2); }
+.ly-names summary { padding: 8px 0 4px; color: var(--muted); cursor: pointer; }
+.ly-names summary:hover { color: var(--ink); }
+.ly-names p { margin: 2px 0 4px; line-height: 1.5; overflow-wrap: anywhere; }
+
+@media (max-width: 1000px) {
+  #loyalty .two { grid-template-columns: minmax(0, 1fr); }   /* the half-width cards get too narrow for the table */
+  .ly-tbl .team .mgr { display: none; }
+  .ly-tbl .team .nm { max-width: 120px; }
+}
+@media (max-width: 760px) {
+  #lyKept .bar-row { grid-template-columns: minmax(100px, 140px) 1fr 62px; }
+  .ly-tbl th, .ly-tbl td { padding-left: 8px; padding-right: 8px; }
+  .ly-tbl .ly-rk { padding-left: 14px; }
+  .ly-tbl th:last-child, .ly-tbl td:last-child { padding-right: 14px; }
+  .ly-tbl .team { gap: 8px; }
+  .ly-tbl .team .logo { width: 24px; height: 24px; }
+  .ly-tbl .team .nm { max-width: 96px; }
+  .ly-hd { padding-right: 14px; }
+  .ly-door { gap: 12px; padding: 12px 14px; }
+  .ly-count { width: 40px; height: 40px; font-size: 18px; }
+}
+@media (max-width: 480px) {
+  .ly-tbl .ly-rk { display: none; }
+  .ly-tbl .ly-pl { padding-left: 14px; }
+  .ly-tbl .team .nm { max-width: 84px; }
+}

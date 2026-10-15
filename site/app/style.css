@@ -1,0 +1,78 @@
+/* Manager style (manager pages): an archetype pill under the name and a fingerprint card.
+   Colors come from the tokens in app.css only. The second declaration of a few colors is a
+   tint of --accent (color-mix); the first is the fallback for browsers without it. */
+
+/* the pill under the manager's name */
+.sty-pill {
+  display: inline-flex; align-items: center; min-height: 26px; padding: 0 11px;
+  font-size: 12px; font-weight: 700; line-height: 1; letter-spacing: .01em; white-space: nowrap;
+  color: var(--ink); cursor: default; border-radius: 999px;
+  background: var(--surface-2);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid var(--border);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* the card: archetype on the left, fingerprint on the right (stacked on narrow screens) */
+.sty-card { padding-bottom: 0; }
+.sty-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 16px 28px; align-items: start; padding: 14px 18px 6px; }
+
+.sty-arch { min-width: 0; padding: 16px 18px 18px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; }
+.sty-eye { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.sty-title { margin-top: 6px; font-size: clamp(26px, 4.4vw, 34px); line-height: 1.08; font-weight: 800; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.sty-blurb { margin: 8px 0 0; font-size: 15px; line-height: 1.45; color: var(--ink-2); }
+.sty-why { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--grid); font-size: 14px; line-height: 1.45; color: var(--ink); overflow-wrap: anywhere; }
+.sty-k { margin-right: 8px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.sty-arch .share-btn { margin-top: 12px; } /* hidden (so no margin either) unless you're signed in */
+
+/* one row per dimension: label, percentile bar, value + rank */
+.sty-rows { margin: 0; padding: 0; list-style: none; min-width: 0; }
+.sty-row { display: grid; grid-template-columns: minmax(0, 168px) minmax(0, 1fr) 64px; align-items: center; gap: 4px 14px; padding: 10px 12px; border-radius: 8px; cursor: default; }
+.sty-row + .sty-row { margin-top: 2px; }
+.sty-row.on {
+  background: var(--surface-2);
+  background: color-mix(in srgb, var(--accent) 9%, var(--surface));
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.sty-lab { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--ink-2); }
+.sty-row.on .sty-lab { color: var(--ink); }
+.sty-mark {
+  margin-top: 3px; padding: 1px 7px; border-radius: 999px;
+  font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink);
+  background: var(--surface-2);
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.sty-bar { position: relative; display: block; height: 10px; border-radius: 5px; background: var(--grid); }
+.sty-bar i { display: block; height: 100%; border-radius: 5px; background: var(--muted); }
+.sty-row.on .sty-bar i { background: var(--accent); }
+.sty-bar::after { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--ink-2); opacity: .55; }
+
+.sty-val { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.15; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sty-val b { font-size: 16px; font-weight: 800; }
+.sty-val small { font-size: 11px; font-weight: 600; color: var(--muted); }
+.sty-row.none .sty-val b { color: var(--muted); }
+.sty-na { font-size: 13px; color: var(--muted); }
+
+.sty-note { margin: 0; padding: 8px 18px 14px; font-size: 13px; line-height: 1.45; color: var(--ink-2); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .sty-bar i { transform-origin: left center; animation: sty-grow .6s cubic-bezier(.2, .7, .2, 1) both; }
+  .sty-row { transition: background-color .15s; }
+}
+@keyframes sty-grow { from { transform: scaleX(0); } }
+
+@media (max-width: 899px) {
+  .sty-body { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* phones: the bar drops under the label and value, full width */
+@media (max-width: 560px) {
+  .sty-body { gap: 12px; padding: 12px 12px 4px; }
+  .sty-arch { padding: 14px 14px 16px; }
+  .sty-row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "lab val" "bar bar"; gap: 7px 10px; padding: 9px 10px; }
+  .sty-lab { grid-area: lab; }
+  .sty-val { grid-area: val; flex-direction: row; align-items: baseline; gap: 6px; }
+  .sty-bar, .sty-na { grid-area: bar; }
+  .sty-note { padding: 6px 14px 14px; }
+}

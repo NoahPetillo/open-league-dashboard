@@ -1,0 +1,70 @@
+/* Lineups tab: "If they could set a lineup" (best-lineup records, the games they'd have flipped).
+   Colors come from the tokens in app.css only. */
+
+/* headline */
+.wi-hl { margin: 0 0 16px; max-width: 34em; font-size: 19px; line-height: 1.35; font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; overflow-wrap: anywhere; }
+.wi-hl b { font-weight: 800; }
+.wi-hl .share-btn { margin-left: 10px; }
+
+/* table: numbers are as wide as they need to be; the team name takes the rest and wraps */
+.wi-tbl td.n, .wi-tbl th.n { width: 1%; }
+.wi-tbl td:first-child { white-space: normal; }
+.wi-tbl td:first-child .team { max-width: 100%; }
+.wi-tbl td:first-child .team .nm { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+.wi-tbl th .sm { display: none; }
+.wi-tbl tr.wi-hit td:first-child { box-shadow: inset 3px 0 0 var(--neg); }
+.wi-pill { display: inline-block; min-width: 26px; padding: 1px 8px; border-radius: 999px; background: var(--neg-soft); color: var(--ink); font-size: 13px; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.wi-key { display: none; }
+
+/* flipped games */
+.wi-h3 { margin: 28px 0 10px; font-size: 17px; font-weight: 700; }
+.wi-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.wi-flip { min-width: 0; padding: 14px 18px; }
+.wi-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.wi-wk { flex: none; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.wi-tag { margin-left: 6px; padding: 1px 7px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-2); font-size: 10px; letter-spacing: .04em; color: var(--ink-2); cursor: default; }
+.wi-line .team { max-width: 100%; }
+.wi-line .team .logo { width: 24px; height: 24px; }
+.wi-lost { font-size: 14px; color: var(--ink-2); }
+.wi-lost b { font-weight: 700; color: var(--bad-text); font-variant-numeric: tabular-nums; }
+.wi-best-row { display: flex; align-items: center; justify-content: space-between; gap: 6px 12px; margin: 10px 0 0; }
+.wi-best { flex: 1 1 auto; min-width: 0; margin: 0; font-size: 14px; font-variant-numeric: tabular-nums; }
+.wi-swap { margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-2); overflow-wrap: anywhere; }
+.wi-swap b { font-weight: 600; color: var(--ink); }
+
+/* a manager's page */
+.wi-mg-rec { margin: 0; padding: 12px 18px 0; font-size: 28px; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.wi-mg-rec small { margin-left: 4px; font-size: 14px; font-weight: 600; letter-spacing: 0; color: var(--muted); }
+.wi-mg-rec .share-btn { float: right; margin-top: 2px; }
+.wi-mg-flip > .share-btn { grid-column: 2 / -1; justify-self: end; margin-top: 4px; }
+.wi-mg-meta { margin: 2px 0 0; padding: 0 18px; font-size: 13px; color: var(--ink-2); }
+.wi-mg-list { margin: 10px 0 0; padding: 0; list-style: none; }
+.wi-mg-flip { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 2px 8px; align-items: center; padding: 10px 18px; border-top: 1px solid var(--grid); }
+.wi-mg-wk { font-size: 12px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wi-mg-opp { min-width: 0; }
+.wi-mg-opp .team { max-width: 100%; }
+.wi-mg-opp .team .logo { width: 24px; height: 24px; }
+.wi-mg-sc { font-size: 14px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.wi-mg-sc small { display: block; font-size: 12px; color: var(--muted); }
+.wi-mg-swap { grid-column: 2 / -1; font-size: 13px; line-height: 1.45; color: var(--ink-2); overflow-wrap: anywhere; }
+.wi-mg-swap b { font-weight: 600; color: var(--ink); }
+
+/* phones and small tablets: short column labels, a key under the table */
+@media (max-width: 760px) {
+  .wi-tbl th .lg { display: none; }
+  .wi-tbl th .sm { display: inline; }
+  .wi-tbl th, .wi-tbl td { padding-left: 8px; padding-right: 8px; }
+  .wi-tbl th:first-child, .wi-tbl td:first-child { padding-left: 12px; }
+  .wi-key { display: block; }
+  .wi-hl { font-size: 17px; }
+}
+@media (max-width: 520px) {
+  .wi-tbl th, .wi-tbl td { padding-left: 6px; padding-right: 6px; }
+  .wi-tbl td:first-child .team { gap: 8px; }
+  .wi-tbl td:first-child .team .mgr { display: none; }
+  .wi-tbl td:first-child .team .logo { width: 22px; height: 22px; }
+  .wi-flip { padding: 12px 14px; }
+  .wi-wk { flex-basis: 100%; }
+  .wi-mg-flip { padding-left: 14px; padding-right: 14px; grid-template-columns: 36px minmax(0, 1fr) auto; }
+  .wi-mg-rec, .wi-mg-meta { padding-left: 14px; padding-right: 14px; }
+}

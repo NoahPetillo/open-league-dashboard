@@ -1,0 +1,77 @@
+/* Trades tab: trade regret meter (raw points each side's new players have scored since a trade) */
+#regret .s0 { --sc: var(--pos); }
+#regret .s1 { --sc: var(--neg); }
+#regret .s2 { --sc: var(--gold); }
+#regret .s3 { --sc: var(--ink-2); }
+#regret .s4 { --sc: var(--muted); }
+
+#regret .rg-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.rg { min-width: 0; overflow: hidden; scroll-margin-top: 64px; }
+.rg-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--grid); font-size: 13px; color: var(--muted); }
+.rg-head b { color: var(--ink); font-weight: 700; font-size: 14px; }
+
+/* each side: team on the left, points on the right (stacks when the card is narrow) */
+.rg-sides { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 20px; padding: 14px 18px 0; }
+.rg-side { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0; padding-left: 12px; border-left: 4px solid var(--sc); }
+.rg-who { min-width: 0; }
+.rg-pts { flex: none; text-align: right; white-space: nowrap; }
+.rg-pts b { display: block; font-size: 24px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.rg-pts small { display: block; font-size: 11px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
+.rg-faab { display: block; margin-top: 2px; font-size: 12px; color: var(--ink-2); }
+
+/* tug of war: each side's share of the combined points */
+.rg-bar { display: flex; gap: 2px; height: 30px; margin: 14px 18px 0; border-radius: 8px; overflow: hidden; background: var(--grid); }
+.rg-seg { display: flex; align-items: center; flex: 1 1 0%; min-width: 0; padding: 0 5px; background: var(--sc); overflow: hidden; }
+.rg-seg.tiny { min-width: 4px; padding: 0; }
+/* the label sits in a pill so it reads the same on every side color, light or dark */
+.rg-pill { min-width: 0; padding: 0 8px; border-radius: 999px; background: var(--surface); color: var(--ink); font-size: 12px; font-weight: 700; line-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+
+.rg-vrow { display: flex; align-items: center; justify-content: space-between; gap: 6px 12px; margin: 10px 18px 0; }
+.rg-verdict { flex: 1 1 auto; min-width: 0; margin: 0; font-size: 15px; color: var(--ink-2); }
+.rg-verdict b { color: var(--ink); font-weight: 700; }
+.rg-verdict .dim { font-weight: 400; }
+
+.rg-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 6px; padding: 0 8px; }
+.rg-toggle, .rg-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 10px; border-radius: 8px; font: inherit; font-size: 14px; font-weight: 600; }
+.rg-toggle { color: var(--ink-2); background: none; border: 0; cursor: pointer; }
+.rg-toggle:hover { color: var(--ink); background: var(--surface-2); }
+.rg-toggle::after { content: ""; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(45deg); }
+.rg-toggle[aria-expanded="true"]::after { transform: translateY(2px) rotate(225deg); }
+.rg-link { color: var(--ink); text-decoration: underline; text-decoration-color: var(--axis); text-underline-offset: 3px; }
+.rg-link:hover { text-decoration-color: var(--ink); }
+.rg-toggle:focus-visible, .rg-link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+/* expanded: chart + player table */
+.rg-more { padding: 4px 18px 16px; border-top: 1px solid var(--grid); }
+.rg-key { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 12px; font-size: 13px; color: var(--ink-2); }
+.rg-key i, .rg-sh i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; background: var(--sc); }
+.rg-chart { margin-top: 6px; }
+.rg-more .tbl-wrap { margin-top: 12px; box-shadow: none; }
+.rg-tbl { font-size: 13px; }
+.rg-tbl th, .rg-tbl td { padding: 8px 10px; }
+.rg-tbl td:first-child, .rg-tbl th:first-child { position: sticky; left: 0; z-index: 1; background: var(--surface); }
+.rg-tbl tbody tr:hover td:first-child { background: var(--surface-2); }
+.rg-tbl .rg-sh td { background: var(--surface-2); font-weight: 650; position: static; }
+.rg-tbl .rg-sticky { position: sticky; left: 10px; display: inline-block; }
+.rg-pl { max-width: 170px; overflow: hidden; text-overflow: ellipsis; }
+.rg-pl .pp { margin-left: 6px; font-size: 11px; color: var(--muted); }
+.rg-sum td { border-top: 1px solid var(--axis); font-weight: 650; color: var(--ink-2); }
+
+@media (max-width: 520px) {
+  .rg-head { padding-left: 14px; padding-right: 14px; }
+  .rg-sides { padding-left: 14px; padding-right: 14px; }
+  .rg-bar, .rg-vrow { margin-left: 14px; margin-right: 14px; }
+  .rg-more { padding-left: 12px; padding-right: 12px; }
+  .rg-pts b { font-size: 21px; }
+  .rg-tbl th, .rg-tbl td { padding-left: 8px; padding-right: 8px; }
+  .rg-pl { max-width: 128px; }
+}
+
+/* "Show all 24 trades" */
+.rg-more-btn {
+  display: block; width: 100%; min-height: 44px; padding: 10px 12px; cursor: pointer;
+  font: inherit; font-size: 14px; font-weight: 600; color: var(--ink-2);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+}
+.rg-more-btn:hover { color: var(--ink); }
+.rg-more-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
